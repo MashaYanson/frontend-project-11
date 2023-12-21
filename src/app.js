@@ -24,13 +24,15 @@ export default function App(){
                 if (!watchedState.urls.includes(urlValue)){
                     watchedState.urls = [urlValue, ...watchedState.urls];
                     urlInput.value = '';
+                    urlInput.classList.remove('invalid');
+
                     urlInput.focus()
                 } else {
                     alert('URL уже существует')
                 }
             })
             .catch(()=>{
-                urlInput.style.border = '2px solid red'; 
+                urlInput.classList.add('invalid');
                 alert('Невалидный URL. Пожалуйста, введите корректный URL.')
             })
         
