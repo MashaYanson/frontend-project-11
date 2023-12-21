@@ -24,7 +24,7 @@ export default function App(){
                 if (!watchedState.urls.includes(urlValue)){
                     watchedState.urls = [urlValue, ...watchedState.urls];
                     urlInput.value = '';
-                    urlInput.classList.remove('invalid');
+                    urlInput.classList.remove('is-invalid');
 
                     urlInput.focus()
                 } else {
@@ -32,7 +32,7 @@ export default function App(){
                 }
             })
             .catch(()=>{
-                urlInput.classList.add('invalid');
+                urlInput.classList.add('is-invalid');
                 alert('Невалидный URL. Пожалуйста, введите корректный URL.')
             })
         
