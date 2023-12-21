@@ -5,7 +5,8 @@ import render from "./render.js";
 
 export default function App(){
     let state = {
-        urls: []
+        urls: [],
+        validation: true,
     }
 
     
@@ -23,16 +24,14 @@ export default function App(){
             .then(()=>{
                 if (!watchedState.urls.includes(urlValue)){
                     watchedState.urls = [urlValue, ...watchedState.urls];
-                    urlInput.value = '';
-                    urlInput.classList.remove('is-invalid');
-
-                    urlInput.focus()
+                    watchedState.validation = true
                 } else {
+                    watchedState.validation = false
                     alert('URL уже существует')
                 }
             })
             .catch(()=>{
-                urlInput.classList.add('is-invalid');
+                watchedState.validation = false
                 alert('Невалидный URL. Пожалуйста, введите корректный URL.')
             })
         
