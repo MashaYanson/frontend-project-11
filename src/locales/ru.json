@@ -1,0 +1,18 @@
+{
+  "validation": {
+    "urlRequired": "Обязательно введите URL",
+    "urlInvalid": "Неверный URL. Пожалуйста, введите корректный URL.",
+    "urlExists": "URL уже существует",
+    "rssExists": "RSS уже существует"
+  },
+  "interface": {
+    "loadSuccess": "RSS успешно загружен",
+    "rssExists": "RSS уже существует",
+    "emptyField": "Не должно быть пустым",
+    "invalidUrl": "Ссылка должна быть валидным URL",
+    "invalidRss": "Ресурс не содержит валидный RSS",
+    "preview": "Просмотр",
+    "posts" : "Посты",
+    "networkError": "Ошибка сети"
+  }
+}
