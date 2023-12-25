@@ -1,6 +1,18 @@
 import onChange from "on-change";
 import * as yup from 'yup';
 import render from "./render.js";
+import i18n from 'i18next';
+import translationRU from './locales/ru.json';
+
+
+i18n.init({
+    lng: 'ru',
+    resources: {
+        ru: {
+            translation: translationRU,
+        },
+    },
+});
 
 
 export default function App(){
@@ -27,12 +39,12 @@ export default function App(){
                     watchedState.validation = true
                 } else {
                     watchedState.validation = false
-                    alert('URL уже существует')
+                    alert(i18n.t('validation.urlExists'))
                 }
             })
             .catch(()=>{
                 watchedState.validation = false
-                alert('Невалидный URL. Пожалуйста, введите корректный URL.')
+                alert(i18n.t('validation.urlInvalid'))
             })
         
     }
