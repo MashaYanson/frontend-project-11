@@ -2,7 +2,7 @@ import onChange from "on-change";
 import * as yup from 'yup';
 import render from "./render.js";
 import i18n from 'i18next';
-import translationRU from './locales/ru.json';
+import translationRU from './locales/ru.js';
 
 
 i18n.init({
@@ -13,6 +13,16 @@ i18n.init({
         },
     },
 });
+
+const validation = (url, addedLinks, i18n ) => {
+    const schema = yup.string()
+        .url(i18n.t('urlInvalid'))
+        .required(i18n.t('urlRequired'))
+        .trim()
+        .notOneOf(addedLinks, i18n.t('urlExists'))
+        .validate(url)
+    return schema
+}
 
 
 export default function App(){
@@ -25,6 +35,8 @@ export default function App(){
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
     form.addEventListener("submit", handleSubmit)
+    
+   
 
     const urlSchema = yup.string().url().required();
     function handleSubmit(event){

@@ -4,8 +4,10 @@ export default function render(state){
     if(state.validation){
         urlInput.value = '';
         urlInput.classList.remove('is-invalid');
+        urlInput.classList.add('is-valid');
         urlInput.focus()
     } else {
+        urlInput.classList.remove('is-valid');
         urlInput.classList.add('is-invalid');
     }
     // рисуем список
