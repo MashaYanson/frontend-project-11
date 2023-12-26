@@ -56,13 +56,13 @@ export default function App(){
         event.preventDefault()
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
-       validation(urlValue, watchedState.urls, i18n)
+       validation(urlValue, watchedState.urls, i18Instance)
            .then((value)=>{
                 watchedState.urls = [value, ...watchedState.urls];
                 watchedState.validation = true
             })
             .catch((error)=>{
-                error.name = i18n.t('errors.defaultError')
+                error.name = i18Instance.t('errors.defaultError')
                 alert(error);
                 watchedState.validation = false
 
