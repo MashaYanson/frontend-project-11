@@ -5,12 +5,12 @@ import i18n from 'i18next';
 import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
 
-const validation = (url, addedLinks, i18n ) => {
+const validation = (url, addedLinks, i18Instance ) => {
     const schema = yup.string()
         .trim()
-        .url(i18n.t('errors.urlInvalid'))
-        .required(i18n.t('errors.urlRequired'))
-        .notOneOf(addedLinks, i18n.t('errors.urlExists'))
+        .url(i18Instance.t('errors.urlInvalid'))
+        .required(i18Instance.t('errors.urlRequired'))
+        .notOneOf(i18Instance, i18n.t('errors.urlExists'))
         .validate(url)
     return schema
 }
@@ -21,8 +21,6 @@ export default function App(){
         urls: [],
         validation: true,
     }
-    
-    
     
     const i18Instance = i18n.createInstance();
     i18Instance.init({
@@ -58,9 +56,8 @@ export default function App(){
         event.preventDefault()
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
-        const schema = validation(urlValue, watchedState.urls, i18n)
-        schema.
-            then((value)=>{
+       validation(urlValue, watchedState.urls, i18n)
+           .then((value)=>{
                 watchedState.urls = [value, ...watchedState.urls];
                 watchedState.validation = true
             })
