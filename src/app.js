@@ -5,18 +5,19 @@ import i18n from 'i18next';
 import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
 
-const validation = (url, addedLinks, i18Instance ) => {
+const validation = (url, addedLinks, i18 ) => {
     const schema = yup.string()
         .trim()
-        .url(i18Instance.t('errors.urlInvalid'))
-        .required(i18Instance.t('errors.urlRequired'))
-        .notOneOf(i18Instance, i18n.t('errors.urlExists'))
+        .url(i18.t('errors.urlInvalid'))
+        .required(i18.t('errors.urlRequired'))
+        .notOneOf(addedLinks,i18.t('errors.urlExists'))
         .validate(url)
     return schema
 }
 
 
 export default function App(){
+  
     let state = {
         urls: [],
         validation: true,
@@ -34,17 +35,6 @@ export default function App(){
             },
         },
     })
-        .then(() => {
-            yup.setLocale({
-                mixed: {
-                    notOneOf: i18Instance.t('errors.defaultError'),
-                },
-                string: {
-                    url: i18Instance.t('errors.urlInvalid'),
-                },
-            })
-        })
-
 
 
     const watchedState = onChange(state, handleRender)
