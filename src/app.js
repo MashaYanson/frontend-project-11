@@ -16,10 +16,10 @@ i18n.init({
 
 const validation = (url, addedLinks, i18n ) => {
     const schema = yup.string()
-        .url(i18n.t('urlInvalid'))
-        .required(i18n.t('urlRequired'))
         .trim()
-        .notOneOf(addedLinks, i18n.t('urlExists'))
+        .url(i18n.t('errors.urlInvalid'))
+        .required(i18n.t('errors.urlRequired'))
+        .notOneOf(addedLinks, i18n.t('errors.urlExists'))
         .validate(url)
     return schema
 }
@@ -38,31 +38,28 @@ export default function App(){
     
    
 
-    const urlSchema = yup.string().url().required();
+
     function handleSubmit(event){
         event.preventDefault()
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
-        urlSchema
-            .validate(urlValue)
-            .then(()=>{
-                if (!watchedState.urls.includes(urlValue)){
-                    watchedState.urls = [urlValue, ...watchedState.urls];
-                    watchedState.validation = true
-                } else {
-                    watchedState.validation = false
-                    alert(i18n.t('validation.urlExists'))
-                }
+        const schema = validation(urlValue, watchedState.urls, i18n)
+        schema.
+            then((value)=>{
+                watchedState.urls = [value, ...watchedState.urls];
+                watchedState.validation = true
             })
-            .catch(()=>{
+            .catch((error)=>{
+                error.name = i18n.t('errors.defaultError')
+                alert(error);
                 watchedState.validation = false
-                alert(i18n.t('validation.urlInvalid'))
+
             })
         
     }
     function handleRender (path, value, previousValue, applyData){
-        console.log(applyData, this.urls)
-        render(watchedState.urls)
+        console.log(applyData, this)
+        render(watchedState)
     
     }
 }

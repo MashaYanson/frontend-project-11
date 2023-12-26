@@ -1,6 +1,6 @@
 export default {
-  translation: {
     errors: {
+      defaultError : 'Ошибка',
       urlRequired : "Обязательно введите URL",
       urlInvalid : "Неверный URL. Пожалуйста, введите корректный URL.",
       urlExists : "URL уже существует",
@@ -17,5 +17,4 @@ export default {
       posts : "Посты",
       feeds: "Фиды",
     }
-  },
 };
