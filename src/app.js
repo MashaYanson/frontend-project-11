@@ -3,16 +3,7 @@ import * as yup from 'yup';
 import render from "./render.js";
 import i18n from 'i18next';
 import translationRU from './locales/ru.js';
-
-
-i18n.init({
-    lng: 'ru',
-    resources: {
-        ru: {
-            translation: translationRU,
-        },
-    },
-});
+import translationENG from './locales/ENG.js';
 
 const validation = (url, addedLinks, i18n ) => {
     const schema = yup.string()
@@ -30,14 +21,38 @@ export default function App(){
         urls: [],
         validation: true,
     }
-
     
+    
+    
+    const i18Instance = i18n.createInstance();
+    i18Instance.init({
+        lng: 'ru',
+        resources: {
+            ru: {
+                translation: translationRU,
+            },
+            eng: {
+                translation: translationENG,
+            },
+        },
+    })
+        .then(() => {
+            yup.setLocale({
+                mixed: {
+                    notOneOf: i18Instance.t('errors.defaultError'),
+                },
+                string: {
+                    url: i18Instance.t('errors.urlInvalid'),
+                },
+            })
+        })
+
+
+
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
     form.addEventListener("submit", handleSubmit)
     
-   
-
 
     function handleSubmit(event){
         event.preventDefault()
