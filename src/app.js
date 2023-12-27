@@ -5,6 +5,7 @@ import i18n from 'i18next';
 import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
 import axios from "axios";
+import parse from './parse.js'
 
 const validation = (url, addedLinks) => {
     const schema = yup.string()
@@ -26,6 +27,8 @@ export default function App(){
     let state = {
         urls: [],
         validation: true,
+        feeds: [],
+      
     }
     
     const i18Instance = i18n.createInstance();
@@ -67,7 +70,7 @@ export default function App(){
                getResponse(value)
                    .then((resp)=>{
                        //парсинг resp.data.content
-                   console.log(resp)
+                   console.log(parse(resp.data.contents))
                        watchedState.urls = [value, ...watchedState.urls];
                        watchedState.validation = true
                })
