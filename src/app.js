@@ -4,6 +4,7 @@ import render from "./render.js";
 import i18n from 'i18next';
 import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
+import axios from "axios";
 
 const validation = (url, addedLinks) => {
     const schema = yup.string()
@@ -15,6 +16,10 @@ const validation = (url, addedLinks) => {
     return schema
 }
 
+const getResponse = (link) => {
+    const url = `https://allorigins.hexlet.app/get?url=${encodeURIComponent(link)}`
+    return axios.get(url); 
+}
 
 export default function App(){
   
@@ -59,8 +64,13 @@ export default function App(){
         const urlValue = urlInput.value;
        validation(urlValue, watchedState.urls, i18Instance)
            .then((value)=>{
-                watchedState.urls = [value, ...watchedState.urls];
-                watchedState.validation = true
+               getResponse(value)
+                   .then((resp)=>{
+                       //парсинг resp.data.content
+                   console.log(resp)
+                       watchedState.urls = [value, ...watchedState.urls];
+                       watchedState.validation = true
+               })
             })
             .catch((error)=>{
                 error.name = i18Instance.t('errors.defaultError')
