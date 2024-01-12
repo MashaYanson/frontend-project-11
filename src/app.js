@@ -6,6 +6,8 @@ import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
 import axios from "axios";
 import parse from './parse.js'
+import { uniqueId } from 'lodash';
+import {value} from "lodash/seq.js";
 
 const validation = (url, addedLinks) => {
     const schema = yup.string()
@@ -19,7 +21,24 @@ const validation = (url, addedLinks) => {
 
 const getResponse = (link) => {
     const url = `https://allorigins.hexlet.app/get?url=${encodeURIComponent(link)}`
-    return axios.get(url); 
+    return axios.get(url, { timeout: 10000 }); 
+}
+
+const createFeed = (parsedRss, value) => {
+    const feedTitle = parsedRss.title;
+    const feedDescription = parsedRss.description;
+    const feedId = uniqueId();
+    const feedLink = value;
+    return {
+        feedTitle,
+        feedDescription,
+        feedId,
+        feedLink,
+    };
+}
+
+const createPost = () => {
+    
 }
 
 export default function App(){
@@ -66,15 +85,19 @@ export default function App(){
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
        validation(urlValue, watchedState.urls, i18Instance)
-           .then((value)=>{
-               getResponse(value)
-                   .then((resp)=>{
-                       //парсинг resp.data.content
-                   console.log(parse(resp.data.contents))
-                       watchedState.urls = [value, ...watchedState.urls];
-                       watchedState.validation = true
-               })
-            })
+           .then((value)=> getResponse(value))
+           .then((resp)=> parse(resp))
+           .then((parsedRSS)=> {
+               const feed = createFeed(parsedRSS, value)
+           })
+           
+            //        .then((resp)=>{
+            //            //парсинг resp.data.content
+            //        console.log(parse(resp.data.contents))
+            //            watchedState.urls = [value, ...watchedState.urls];
+            //            watchedState.validation = true
+            //    })
+            // })
             .catch((error)=>{
                 error.name = i18Instance.t('errors.defaultError')
                 alert(error.message);
