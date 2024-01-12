@@ -25,8 +25,8 @@ const getResponse = (link) => {
 }
 
 const createFeed = (parsedRss, value) => {
-    const feedTitle = parsedRss.title;
-    const feedDescription = parsedRss.description;
+    const feedTitle = parsedRss.titleValue;
+    const feedDescription = parsedRss.descriptionValue;
     const feedId = uniqueId();
     const feedLink = value;
     return {
@@ -37,9 +37,9 @@ const createFeed = (parsedRss, value) => {
     };
 }
 
-const createPost = () => {
-    
-}
+// const createPost = () => {
+//    
+// }
 
 export default function App(){
   
@@ -86,18 +86,12 @@ export default function App(){
         const urlValue = urlInput.value;
        validation(urlValue, watchedState.urls, i18Instance)
            .then((value)=> getResponse(value))
-           .then((resp)=> parse(resp))
-           .then((parsedRSS)=> {
-               const feed = createFeed(parsedRSS, value)
+           .then((resp)=> {
+               const feed = createFeed(parse(resp), value)
+               watchedState.urls = [value, ...watchedState.urls]
+               watchedState.feeds = [feed,...watchedState.feeds]
+               watchedState.validation = true
            })
-           
-            //        .then((resp)=>{
-            //            //парсинг resp.data.content
-            //        console.log(parse(resp.data.contents))
-            //            watchedState.urls = [value, ...watchedState.urls];
-            //            watchedState.validation = true
-            //    })
-            // })
             .catch((error)=>{
                 error.name = i18Instance.t('errors.defaultError')
                 alert(error.message);
