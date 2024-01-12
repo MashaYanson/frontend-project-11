@@ -10,9 +10,9 @@ export default (res) => {
     const titleElement = doc.getElementsByTagName("title")[0];
     console.log('element!')
     console.log(titleElement)
-    const titleValue = titleElement.textContent;
+    const title = titleElement.textContent;
     const descriptionElem = doc.getElementsByTagName('description')[0];
-    const descriptionValue = descriptionElem.textContent
+    const description = descriptionElem.textContent
     console.log('readed feed title and desc')
    const items = doc.getElementsByTagName('item');
     console.log('start reading items')
@@ -33,13 +33,15 @@ export default (res) => {
         }
     })
     const feed = {
-        titleValue,
-        descriptionValue
+        title,
+        description,
     }
     console.log('creating feed')
     console.log(feed)
+    console.log('creating posts')
+    console.log(posts)
   
-
+ 
     return {feed, posts}
     // {
     //     title: titleValue,

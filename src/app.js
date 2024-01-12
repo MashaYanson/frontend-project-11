@@ -25,13 +25,13 @@ const getResponse = (link) => {
 }
 
 const createFeed = (parsedRss, value) => {
-    const feedTitle = parsedRss.titleValue;
-    const feedDescription = parsedRss.descriptionValue;
+    const feedTitle = parsedRss.title;
+    const feedDescription = parsedRss.description;
     const feedId = uniqueId();
     const feedLink = value;
     return {
-        feedTitle,
-        feedDescription,
+        title:feedTitle,
+        description:feedDescription,
         feedId,
         feedLink,
     };
