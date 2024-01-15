@@ -23,7 +23,7 @@ export default (res) => {
         const link = item.querySelector('link').textContent
         if(i === 0){
             console.log('reading post');
-            console.log(item);
+            // console.log(item);
             console.log({title,description,link})
         } 
         return {
@@ -36,10 +36,10 @@ export default (res) => {
         title,
         description,
     }
-    console.log('creating feed')
-    console.log(feed)
-    console.log('creating posts')
-    console.log(posts)
+    // console.log('creating feed')
+    // console.log(feed)
+    // console.log('creating posts')
+    // console.log(posts)
   
  
     return {feed, posts}
