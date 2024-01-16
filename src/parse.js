@@ -32,9 +32,10 @@ export default (res) => {
             link,
         }
     })
-    const feed = {
+    return {
         title,
         description,
+        posts
     }
     // console.log('creating feed')
     // console.log(feed)
@@ -42,7 +43,7 @@ export default (res) => {
     // console.log(posts)
   
  
-    return {feed, posts}
+    
     // {
     //     title: titleValue,
     //     author: authorName,

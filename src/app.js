@@ -6,7 +6,7 @@ import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
 import axios from "axios";
 import parse from './parse.js'
-import { uniqueId } from 'lodash';
+import {uniqueId} from 'lodash';
 import {value} from "lodash/seq.js";
 
 const validation = (url, addedLinks) => {
@@ -34,6 +34,7 @@ const createFeed = (parsedRss, value) => {
         description:feedDescription,
         feedId,
         feedLink,
+        posts: parsedRss.posts || []
     };
 }
 
@@ -47,6 +48,7 @@ export default function App(){
         urls: [],
         validation: true,
         feeds: [],
+        posts: []
       
     }
     
@@ -90,6 +92,10 @@ export default function App(){
                const feed = createFeed(parse(resp), value)
                watchedState.urls = [value, ...watchedState.urls]
                watchedState.feeds = [feed,...watchedState.feeds]
+               watchedState.posts = watchedState.feeds.reduce((acc, feed) => {
+                   return [...acc, ...feed.posts]
+               }, []);
+               
                watchedState.validation = true
            })
             .catch((error)=>{
