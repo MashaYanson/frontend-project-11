@@ -9,11 +9,12 @@ import parse from './parse.js'
 import {uniqueId} from 'lodash';
 import {value} from "lodash/seq.js";
 
-const validation = (url, addedLinks) => {
+//дописать в валидации i18Instance
+const validation = (url, addedLinks, i18Instance ) => {
     const schema = yup.string()
         .trim()
         .url()
-        .required()
+        .required(i18Instance.t('urlRequired'))
         .notOneOf(addedLinks)
         .validate(url)
     return schema
@@ -59,7 +60,9 @@ export default function App(){
         urls: [],
         validation: true,
         feeds: [],
-        posts: []
+        posts: [],
+        loadingStatus: null,
+        
       
     }
     
@@ -87,9 +90,7 @@ export default function App(){
         })
     })
 
-   
-
-
+    
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
     form.addEventListener("submit", handleSubmit)
@@ -97,10 +98,13 @@ export default function App(){
 
     function handleSubmit(event){
         event.preventDefault()
+        watchedState.loadingStatus = 'loading'
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
        validation(urlValue, watchedState.urls, i18Instance)
-           .then((value)=> getResponse(value))
+           .then((value)=> {
+               getResponse(value)
+           })
            .then((resp)=> {
                const feed = createFeed(parse(resp), value)
                watchedState.urls = [value, ...watchedState.urls]
@@ -110,14 +114,18 @@ export default function App(){
                }, []);
                
                watchedState.validation = true
+               watchedState.loadingStatus = 'success'
            })
             .catch((error)=>{
                 error.name = i18Instance.t('errors.defaultError')
                 alert(error.message);
                 watchedState.validation = false
+                watchedState.loadingStatus = 'fail'
 
             })
-        
+           .finally(() => {
+               watchedState.loadingStatus = null;
+           })
     }
     function handleRender (path, value, previousValue, applyData){
         console.log(applyData, this)
