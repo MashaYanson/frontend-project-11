@@ -42,6 +42,17 @@ const createFeed = (parsedRss, value) => {
 //    
 // }
 
+// const updateData = () => {
+//     //стейт копируем? записываем все посты
+//     // фиды - getResponse
+//     // parse
+//     // получить все посты по новому?
+//     // сравнить старые посты и новые ?
+//
+// }
+
+
+
 export default function App(){
   
     let state = {
@@ -75,6 +86,8 @@ export default function App(){
             }
         })
     })
+
+   
 
 
     const watchedState = onChange(state, handleRender)
