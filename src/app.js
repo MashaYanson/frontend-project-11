@@ -4,55 +4,8 @@ import render from "./render.js";
 import i18n from 'i18next';
 import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
-import axios from "axios";
-import parse from './parse.js'
-import {uniqueId} from 'lodash';
-import {value} from "lodash/seq.js";
-
-//дописать в валидации i18Instance
-const validation = (url, addedLinks, i18Instance ) => {
-    const schema = yup.string()
-        .trim()
-        .url()
-        .required(i18Instance.t('urlRequired'))
-        .notOneOf(addedLinks)
-        .validate(url)
-    return schema
-}
-
-const getResponse = (link) => {
-    const url = `https://allorigins.hexlet.app/get?url=${encodeURIComponent(link)}`
-    return axios.get(url, { timeout: 10000 }); 
-}
-
-const createFeed = (parsedRss, value) => {
-    const feedTitle = parsedRss.title;
-    const feedDescription = parsedRss.description;
-    const feedId = uniqueId();
-    const feedLink = value;
-    return {
-        title:feedTitle,
-        description:feedDescription,
-        feedId,
-        feedLink,
-        posts: parsedRss.posts || []
-    };
-}
-
-// const createPost = () => {
-//    
-// }
-
-// const updateData = () => {
-//     //стейт копируем? записываем все посты
-//     // фиды - getResponse
-//     // parse
-//     // получить все посты по новому?
-//     // сравнить старые посты и новые ?
-//
-// }
-
-
+import getResponse from "./getResponse.js";
+import validation from "./validationSchema.js";
 
 export default function App(){
   
@@ -62,8 +15,9 @@ export default function App(){
         feeds: [],
         posts: [],
         loadingStatus: null,
+        textError: '',
+        isError: false,
         
-      
     }
     
     const i18Instance = i18n.createInstance();
@@ -98,38 +52,20 @@ export default function App(){
 
     function handleSubmit(event){
         event.preventDefault()
-        watchedState.loadingStatus = 'loading'
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
+        
        validation(urlValue, watchedState.urls, i18Instance)
-           .then((value)=> {
-               getResponse(value)
-           })
-           .then((resp)=> {
-               const feed = createFeed(parse(resp), value)
-               watchedState.urls = [value, ...watchedState.urls]
-               watchedState.feeds = [feed,...watchedState.feeds]
-               watchedState.posts = watchedState.feeds.reduce((acc, feed) => {
-                   return [...acc, ...feed.posts]
-               }, []);
-               
-               watchedState.validation = true
-               watchedState.loadingStatus = 'success'
-           })
+           .then((value)=> {getResponse(value,watchedState)})
             .catch((error)=>{
-                error.name = i18Instance.t('errors.defaultError')
-                alert(error.message);
+                watchedState.isError = true
+                error.name = i18Instance.t('errors.invalidUrl')
+                watchedState.textError = i18Instance.t('errors.invalidUrl');
                 watchedState.validation = false
-                watchedState.loadingStatus = 'fail'
-
             })
-           .finally(() => {
-               watchedState.loadingStatus = null;
-           })
     }
     function handleRender (path, value, previousValue, applyData){
         console.log(applyData, this)
         render(watchedState)
-    
     }
 }
