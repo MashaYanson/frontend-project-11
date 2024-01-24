@@ -10,7 +10,6 @@ import validation from "./validationSchema.js";
 export default function App(){
   
     let state = {
-        urls: [],
         validation: true,
         feeds: [],
         posts: [],
@@ -19,7 +18,8 @@ export default function App(){
         isError: false,
         
     }
-    
+    // watchedState.urls
+    // watchedState.feeds.map(({link})+>link)
     const i18Instance = i18n.createInstance();
     i18Instance.init({
         lng: 'ru',
@@ -54,8 +54,9 @@ export default function App(){
         event.preventDefault()
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
-        
-       validation(urlValue, watchedState.urls, i18Instance)
+        const links = watchedState.feeds.map(({feedLink})=>feedLink);
+        console.log(links)
+       validation(urlValue, links, i18Instance)
            .then((value)=> {
                getResponse(value,watchedState, i18Instance)
             // getResponse (resp)=> updateFeed(parse(response))
