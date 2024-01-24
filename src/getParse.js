@@ -1,6 +1,6 @@
 import parse from "./parse.js";
 
-const getParse= (resp, value, watchedState) => {
+const getParse= (resp, value, watchedState, i18Instance) => {
     try {
         const feed = parse(resp, value)
         watchedState.urls = [value, ...watchedState.urls]
@@ -11,14 +11,11 @@ const getParse= (resp, value, watchedState) => {
 
         watchedState.validation = true
         watchedState.loadingStatus = 'success'
-        watchedState.textError = 'rss успешно загружен'
+        watchedState.textError = i18Instance.t('interface.loadSuccess')
         watchedState.isError = false
-
     } catch (e){
         watchedState.isError = true
-        watchedState.textError = 'ошибка парсинга'
-        
-        
+        watchedState.textError = i18Instance.t('errors.invalidRss');
     }
 }
 export default getParse

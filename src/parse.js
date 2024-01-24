@@ -1,10 +1,10 @@
 import {uniqueId} from "lodash";
 
-export default (res, value) => {
-    console.log('init parser')
+export default (res) => {
     const parser = new DOMParser()
     const doc = parser.parseFromString(res.data.contents, "application/xml");
     const titleElement = doc.getElementsByTagName("title")[0];
+    const linkElement = doc.getElementsByTagName("link")[0];
     const title = titleElement.textContent;
     const descriptionElem = doc.getElementsByTagName('description')[0];
     const description = descriptionElem.textContent
@@ -24,7 +24,7 @@ export default (res, value) => {
     const feedTitle = title;
     const feedDescription = description;
     const feedId = uniqueId();
-    const feedLink = value;
+    const feedLink = linkElement.textContent;
     return {
         title:feedTitle,
         description:feedDescription,

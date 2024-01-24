@@ -56,11 +56,14 @@ export default function App(){
         const urlValue = urlInput.value;
         
        validation(urlValue, watchedState.urls, i18Instance)
-           .then((value)=> {getResponse(value,watchedState)})
+           .then((value)=> {
+               getResponse(value,watchedState, i18Instance)
+            // getResponse (resp)=> updateFeed(parse(response))
+           })
             .catch((error)=>{
                 watchedState.isError = true
                 error.name = i18Instance.t('errors.invalidUrl')
-                watchedState.textError = i18Instance.t('errors.invalidUrl');
+                watchedState.textError = i18Instance.t('errors.defaultError');
                 watchedState.validation = false
             })
     }
