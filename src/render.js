@@ -18,6 +18,7 @@ export default function render(state) {
         errorMessageEl.classList.remove('text-success')
         errorMessageEl.classList.add('text-danger')
     }
+    
 
     
     const el = document.getElementById('content')
@@ -25,6 +26,7 @@ export default function render(state) {
     if (!state.isError) {
         el.innerHTML = createHtmlString(state)
     }
+    
 
 }
 

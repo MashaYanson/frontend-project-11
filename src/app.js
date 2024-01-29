@@ -6,6 +6,7 @@ import translationRU from './locales/ru.js';
 import translationENG from './locales/ENG.js';
 import getResponse from "./getResponse.js";
 import validation from "./validationSchema.js";
+import updateFeed from "./updatePosts.js";
 
 export default function App(){
   
@@ -16,6 +17,7 @@ export default function App(){
         loadingStatus: null,
         textError: '',
         isError: false,
+        readedPosts : [],
         
     }
     // watchedState.urls
@@ -48,8 +50,20 @@ export default function App(){
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
     form.addEventListener("submit", handleSubmit)
-    
 
+function refreshFeeds(){
+    setTimeout(function repeat() {
+        const promises = watchedState.feeds.map((feed)=>{
+            return getResponse(feed.feedLink)
+        })
+        Promise.all(promises).then((responses) => {
+            responses.forEach((feed) => {
+                updateFeed(watchedState, feed)
+            })
+        }).catch()
+        setTimeout(repeat, 5000);
+    }, 5000);
+}
     function handleSubmit(event){
         event.preventDefault()
         const urlInput = document.getElementById('inputAddress');
@@ -58,16 +72,28 @@ export default function App(){
         console.log(links)
        validation(urlValue, links, i18Instance)
            .then((value)=> {
-               getResponse(value,watchedState, i18Instance)
+               
+               return getResponse(value,watchedState, i18Instance)
             // getResponse (resp)=> updateFeed(parse(response))
+           })
+           .then((feed)=>{
+               console.log(feed)
+              
+               if(!watchedState.feeds.length){
+                   refreshFeeds();
+               }
+               updateFeed(watchedState,feed)
+              
            })
             .catch((error)=>{
                 watchedState.isError = true
                 error.name = i18Instance.t('errors.invalidUrl')
-                watchedState.textError = i18Instance.t('errors.defaultError');
+                watchedState.textError = error.message
                 watchedState.validation = false
             })
     }
+    
+   
     function handleRender (path, value, previousValue, applyData){
         console.log(applyData, this)
         render(watchedState)

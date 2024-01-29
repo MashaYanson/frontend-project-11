@@ -1,11 +1,11 @@
 import * as yup from "yup";
 
-const validation = (url, addedLinks, i18Instance ) => {
+const validation = (url, addedLinks) => {
     const schema = yup.string()
         .trim()
-        .url(i18Instance.t('urlInvalid'))
-        .required(i18Instance.t('urlRequired'))
-        .notOneOf(addedLinks, i18Instance.t('urlExists'))
+        .url()
+        .required()
+        .notOneOf(addedLinks)
         .validate(url)
     return schema
 }
