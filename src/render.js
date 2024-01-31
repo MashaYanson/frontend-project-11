@@ -1,7 +1,8 @@
 import createHtmlString from "./components/createHtmlString.js";
 
 export default function render(state) {
- 
+    
+   // if (state.readedPosts)
     const errorMessageEl = document.getElementById('errortext')
     errorMessageEl.textContent = state.textError
     const urlInput = document.getElementById('inputAddress');

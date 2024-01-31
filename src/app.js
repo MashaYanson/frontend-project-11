@@ -14,10 +14,11 @@ export default function App(){
         validation: true,
         feeds: [],
         posts: [],
+        readedPosts : [],
         loadingStatus: null,
         textError: '',
         isError: false,
-        readedPosts : [],
+        
         
     }
     // watchedState.urls
@@ -50,6 +51,19 @@ export default function App(){
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
     form.addEventListener("submit", handleSubmit)
+    
+     const posts = document.getElementById('content')
+        posts.addEventListener('click', (e)=> {
+            if (e.target.classList.contains('read-button')) {
+                //console.log(e.target.dataset.link);
+                watchedState.readedPosts.push(e.target.dataset.link)
+            }
+        })
+           
+    //         const idClick = e.target.dataset.id;
+    //         console.log(idClick)
+    //     })
+    
 
 function refreshFeeds(){
     setTimeout(function repeat() {
@@ -69,7 +83,7 @@ function refreshFeeds(){
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
         const links = watchedState.feeds.map(({feedLink})=>feedLink);
-        console.log(links)
+        console.log(event)
        validation(urlValue, links, i18Instance)
            .then((value)=> {
                
@@ -77,8 +91,6 @@ function refreshFeeds(){
             // getResponse (resp)=> updateFeed(parse(response))
            })
            .then((feed)=>{
-               console.log(feed)
-              
                if(!watchedState.feeds.length){
                    refreshFeeds();
                }
@@ -93,6 +105,7 @@ function refreshFeeds(){
             })
     }
     
+
    
     function handleRender (path, value, previousValue, applyData){
         console.log(applyData, this)

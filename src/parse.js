@@ -13,10 +13,12 @@ export default (res, feedLink) => {
         const title = item.querySelector('title').textContent
         const description = item.querySelector('description').textContent
         const link = item.querySelector('link').textContent
+        const postId = uniqueId();
         return {
             title,
             description,
             link,
+            postId
         }
     })
     
