@@ -13,8 +13,10 @@ const getParse= (resp, value, watchedState, i18Instance) => {
         watchedState.textError = i18Instance.t('interface.loadSuccess')
         watchedState.isError = false
     } catch (e){
-        watchedState.isError = true
-        watchedState.textError = i18Instance.t('errors.invalidRss');
+        console.log('parse error')
+        throw  new Error('errors.invalidRss')
+        // watchedState.isError = true
+        // watchedState.textError = i18Instance.t('errors.invalidRss');
     }
 }
 export default getParse

@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import render from "./render.js";
 import i18n from 'i18next';
 import translationRU from './locales/ru.js';
-import translationENG from './locales/ENG.js';
+import translationENG from './locales/eng.js';
 import getResponse from "./getResponse.js";
 import validation from "./validationSchema.js";
 import updateFeed from "./updatePosts.js";
@@ -98,10 +98,16 @@ function refreshFeeds(){
               
            })
             .catch((error)=>{
+                console.log('error')
+                console.log(error.message)
                 watchedState.isError = true
-                error.name = i18Instance.t('errors.invalidUrl')
-                watchedState.textError = error.message
+                error.name = i18Instance.t(error)
+                watchedState.textError = i18Instance.t(error.message)
                 watchedState.validation = false
+                // watchedState.isError = true
+                // error.name = i18Instance.t('errors.invalidUrl')
+                // watchedState.textError = error.message
+                // watchedState.validation = false
             })
     }
     
