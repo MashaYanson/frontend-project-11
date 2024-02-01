@@ -27,7 +27,7 @@ i18Instance.init({
 
         },
         mixed:{
-            notOneOf : i18Instance.t('errors.urlExists'),
+            notOneOf : i18Instance.t('errors.rssExists'),
         }
     })
 })
