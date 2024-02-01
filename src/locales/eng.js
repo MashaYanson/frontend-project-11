@@ -16,5 +16,8 @@ export default {
         preview: 'Preview',
         posts: 'Posts',
         feeds: 'Feeds',
+        submitButton: "Add",
+        readMoreButton: "Read more",
+        closeButton: "Close",
     },
 };

@@ -1,3 +1,4 @@
+import {i18Instance} from "../app.js";
 const createModal = (link, title, description,i) => {
 
     return `<div class="modal fade" id="modal${i}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -11,8 +12,8 @@ const createModal = (link, title, description,i) => {
        ${description}
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary full-article" href=${link}>Читать полностью</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary full-article" href=${link}>${i18Instance.t('interface.readMoreButton')}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${i18Instance.t('interface.closeButton')}</button>
       </div>
     </div>
   </div>

@@ -15,5 +15,8 @@ export default {
       preview: "Просмотр",
       posts : "Посты",
       feeds: "Фиды",
+      submitButton: "Добавить",
+      readMoreButton: "Читать полностью",
+      closeButton: "Закрыть",
     }
 };
