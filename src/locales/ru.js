@@ -1,7 +1,7 @@
 export default {
     errors: {
       urlRequired : "Обязательно введите URL",
-      urlInvalid : "Неверный URL. Пожалуйста, введите корректный URL.",
+      urlInvalid : "Ссылка должна быть валидным URL",
       urlExists : "URL уже существует",
       rssExists : "RSS уже существует",
       networkError: "Ошибка сети",

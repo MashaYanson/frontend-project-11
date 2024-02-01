@@ -102,8 +102,9 @@ function refreshFeeds(){
            })
             .catch((error)=>{
                 console.log('error')
-                console.log(error.message)
                 watchedState.isError = true
+                watchedState.loadingStatus = 'failed'
+                console.log(error.message)
                 error.name = i18Instance.t(error)
                 watchedState.textError = i18Instance.t(error.message)
                 watchedState.validation = false
