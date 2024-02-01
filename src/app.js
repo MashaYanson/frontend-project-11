@@ -92,6 +92,8 @@ function refreshFeeds(){
             // getResponse (resp)=> updateFeed(parse(response))
            })
            .then((feed)=>{
+               watchedState.loadingStatus = 'success'
+               watchedState.textError = i18Instance.t('interface.loadSuccess')
                if(!watchedState.feeds.length){
                    refreshFeeds();
                }

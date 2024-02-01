@@ -19,15 +19,14 @@ export default function render(state) {
         errorMessageEl.classList.add('text-danger')
     }
      const submitButton = document.getElementById('submitbtn')
+    
      if (state.loadingStatus === 'loading') {
          submitButton.setAttribute('disabled', true)
          
-     }
-    else  {
+     } else  {
         submitButton.removeAttribute('disabled')
     }
      
-    
 
     
     const el = document.getElementById('content')
