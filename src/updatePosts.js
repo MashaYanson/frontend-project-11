@@ -6,15 +6,7 @@ const updateFeed = (watchedState, feed) => {
        //просмотренные посты 
        // новые посты 
        // 
-       
-       
-       
-       
-       
-       
-       
-       
-       
+
    }
    else {
         watchedState.feeds = [feed,...watchedState.feeds]

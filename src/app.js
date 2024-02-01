@@ -8,6 +8,29 @@ import getResponse from "./getResponse.js";
 import validation from "./validationSchema.js";
 import updateFeed from "./updatePosts.js";
 
+export const i18Instance = i18n.createInstance();
+i18Instance.init({
+    lng: 'ru',
+    resources: {
+        ru: {
+            translation: translationRU,
+        },
+        eng: {
+            translation: translationENG,
+        },
+    },
+}).then(()=>{
+    yup.setLocale({
+        string:{
+            url: i18Instance.t('errors.urlInvalid'),
+            required: i18Instance.t('errors.urlRequired'),
+
+        },
+        mixed:{
+            notOneOf : i18Instance.t('errors.urlExists'),
+        }
+    })
+})
 export default function App(){
   
     let state = {
@@ -23,29 +46,7 @@ export default function App(){
     }
     // watchedState.urls
     // watchedState.feeds.map(({link})+>link)
-    const i18Instance = i18n.createInstance();
-    i18Instance.init({
-        lng: 'ru',
-        resources: {
-            ru: {
-                translation: translationRU,
-            },
-            eng: {
-                translation: translationENG,
-            },
-        },
-    }).then(()=>{
-        yup.setLocale({
-            string:{
-                url: i18Instance.t('errors.urlInvalid'),
-                required: i18Instance.t('errors.urlRequired'),
-               
-            },
-            mixed:{
-                notOneOf : i18Instance.t('errors.urlExists'),
-            }
-        })
-    })
+    
 
     
     const watchedState = onChange(state, handleRender)
@@ -80,13 +81,13 @@ function refreshFeeds(){
 }
     function handleSubmit(event){
         event.preventDefault()
+       
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
         const links = watchedState.feeds.map(({feedLink})=>feedLink);
-        console.log(event)
        validation(urlValue, links, i18Instance)
            .then((value)=> {
-               
+               watchedState.loadingStatus = 'loading'
                return getResponse(value,watchedState, i18Instance)
             // getResponse (resp)=> updateFeed(parse(response))
            })

@@ -2,7 +2,6 @@ import createHtmlString from "./components/createHtmlString.js";
 
 export default function render(state) {
     
-   // if (state.readedPosts)
     const errorMessageEl = document.getElementById('errortext')
     errorMessageEl.textContent = state.textError
     const urlInput = document.getElementById('inputAddress');
@@ -19,6 +18,15 @@ export default function render(state) {
         errorMessageEl.classList.remove('text-success')
         errorMessageEl.classList.add('text-danger')
     }
+     const submitButton = document.getElementById('submitbtn')
+     if (state.loadingStatus === 'loading') {
+         submitButton.setAttribute('disabled', true)
+         
+     }
+    else  {
+        submitButton.removeAttribute('disabled')
+    }
+     
     
 
     
@@ -27,6 +35,7 @@ export default function render(state) {
     if (!state.isError) {
         el.innerHTML = createHtmlString(state)
     }
+    
     
 
 }
