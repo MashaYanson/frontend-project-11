@@ -1,4 +1,5 @@
 import createHtmlString from "./components/createHtmlString.js";
+import createModal from "./components/createModal.js";
 
 export default function render(state) {
     
@@ -34,7 +35,10 @@ export default function render(state) {
     if (!state.isError) {
         el.innerHTML = createHtmlString(state)
     }
-    
+    if(state.modalIndex !== null){
+        const el = document.getElementById('modal-dialog')
+        el.innerHTML = createModal(state)
+    }
     
 
 }

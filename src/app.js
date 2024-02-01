@@ -41,6 +41,7 @@ export default function App(){
         loadingStatus: null,
         textError: '',
         isError: false,
+        modalIndex: null,
         
         
     }
@@ -51,6 +52,9 @@ export default function App(){
     
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
+    // const myModal = new bootstrap.Modal('#myModal', {
+    //     keyboard: false
+    // })
     form.addEventListener("submit", handleSubmit)
     
      const posts = document.getElementById('content')
@@ -58,6 +62,12 @@ export default function App(){
             if (e.target.classList.contains('read-button')) {
                 //console.log(e.target.dataset.link);
                 watchedState.readedPosts.push(e.target.dataset.link)
+            }
+            if(e.target.classList.contains('open-modal')) {
+                watchedState.modalIndex = e.target.dataset.id;
+            }
+            if(e.target.classList.contains('close-modal')) {
+                watchedState.modalIndex = null
             }
         })
            

@@ -1,6 +1,7 @@
 import createPost from "./createPost.js";
 import createFeed from "./createFeed.js";
 import {i18Instance} from "../app.js";
+import createModal from "./createModal.js";
 
 const makePostContainer = (state) => {
     if (state.posts.length > 0){
@@ -35,6 +36,6 @@ const createHtmlString = (state) => {
                                 <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds">
                                 ${makeFeedContainer(state)}
                                 </div>
-                            </div>`
+                            </div></div>`
 }
 export default createHtmlString
