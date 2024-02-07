@@ -8,30 +8,32 @@ import getResponse from "./getResponse.js";
 import validation from "./validationSchema.js";
 import updateFeed from "./updatePosts.js";
 
-export const i18Instance = i18n.createInstance();
-i18Instance.init({
-    lng: 'ru',
-    resources: {
-        ru: {
-            translation: translationRU,
-        },
-        eng: {
-            translation: translationENG,
-        },
-    },
-}).then(()=>{
-    yup.setLocale({
-        string:{
-            url: i18Instance.t('errors.urlInvalid'),
-            required: i18Instance.t('errors.urlRequired'),
 
-        },
-        mixed:{
-            notOneOf : i18Instance.t('errors.rssExists'),
-        }
-    })
-})
 export default function App(){
+
+    const i18Instance = i18n.createInstance();
+    i18Instance.init({
+        lng: 'ru',
+        resources: {
+            ru: {
+                translation: translationRU,
+            },
+            eng: {
+                translation: translationENG,
+            },
+        },
+    }).then(()=>{
+        yup.setLocale({
+            string:{
+                url: i18Instance.t('errors.urlInvalid'),
+                required: i18Instance.t('errors.urlRequired'),
+
+            },
+            mixed:{
+                notOneOf : i18Instance.t('errors.rssExists'),
+            }
+        })
+    })
   
     let state = {
         validation: true,
@@ -45,22 +47,15 @@ export default function App(){
         
         
     }
-    // watchedState.urls
-    // watchedState.feeds.map(({link})+>link)
-    
-
     
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
-    // const myModal = new bootstrap.Modal('#myModal', {
-    //     keyboard: false
-    // })
+ 
     form.addEventListener("submit", handleSubmit)
     
      const posts = document.getElementById('content')
         posts.addEventListener('click', (e)=> {
             if (e.target.classList.contains('read-button')) {
-                //console.log(e.target.dataset.link);
                 watchedState.readedPosts.push(e.target.dataset.link)
             }
             if(e.target.classList.contains('open-modal')) {
@@ -70,10 +65,7 @@ export default function App(){
                 watchedState.modalIndex = null
             }
         })
-           
-    //         const idClick = e.target.dataset.id;
-    //         console.log(idClick)
-    //     })
+    
     
 
 function refreshFeeds(){
@@ -99,7 +91,6 @@ function refreshFeeds(){
            .then((value)=> {
                watchedState.loadingStatus = 'loading'
                return getResponse(value,watchedState, i18Instance)
-            // getResponse (resp)=> updateFeed(parse(response))
            })
            .then((feed)=>{
                watchedState.loadingStatus = 'success'
@@ -111,24 +102,17 @@ function refreshFeeds(){
               
            })
             .catch((error)=>{
-                console.log('error')
                 watchedState.isError = true
                 watchedState.loadingStatus = 'failed'
-                console.log(error.message)
                 error.name = i18Instance.t(error)
                 watchedState.textError = i18Instance.t(error.message)
                 watchedState.validation = false
-                // watchedState.isError = true
-                // error.name = i18Instance.t('errors.invalidUrl')
-                // watchedState.textError = error.message
-                // watchedState.validation = false
             })
     }
     
 
    
     function handleRender (path, value, previousValue, applyData){
-        console.log(applyData, this)
-        render(watchedState)
+        render(watchedState, i18Instance)
     }
 }

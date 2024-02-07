@@ -1,7 +1,7 @@
 import createHtmlString from "./components/createHtmlString.js";
 import createModal from "./components/createModal.js";
 
-export default function render(state) {
+export default function render(state, i18Instance) {
     
     const errorMessageEl = document.getElementById('errortext')
     errorMessageEl.textContent = state.textError
@@ -28,16 +28,15 @@ export default function render(state) {
         submitButton.removeAttribute('disabled')
     }
      
-
     
     const el = document.getElementById('content')
 
     if (!state.isError) {
-        el.innerHTML = createHtmlString(state)
+        el.innerHTML = createHtmlString(state, i18Instance)
     }
     if(state.modalIndex !== null){
         const el = document.getElementById('modal-dialog')
-        el.innerHTML = createModal(state)
+        el.innerHTML = createModal(state, i18Instance)
     }
     
 

@@ -1,21 +1,19 @@
 import createPost from "./createPost.js";
 import createFeed from "./createFeed.js";
-import {i18Instance} from "../app.js";
-import createModal from "./createModal.js";
 
-const makePostContainer = (state) => {
+const makePostContainer = (state, i18Instance) => {
     if (state.posts.length > 0){
         return `<div class="card border-0">
         <div class="card-body">
             <h2 class="card-title h4">${i18Instance.t('interface.posts')}</h2>
         </div>
-        <ul class="list-group border-0 rounded-0">${state.posts.map((item, i) => createPost(item, i, state.readedPosts)).join('')}</ul>
+        <ul class="list-group border-0 rounded-0">${state.posts.map((item, i) => createPost(item, i, state.readedPosts, i18Instance)).join('')}</ul>
     </div>`
     }
    return ''
 }
 
-const makeFeedContainer = (state) => {
+const makeFeedContainer = (state, i18Instance) => {
     if (state.feeds.length > 0){
         return `<div class="card border-0" >
                   <div class="card-body">

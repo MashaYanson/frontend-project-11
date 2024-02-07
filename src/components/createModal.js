@@ -1,8 +1,5 @@
-import {i18Instance} from "../app.js";
 
-
-
-const createModal = (state) => {
+const createModal = (state, i18Instance) => {
     const post = state.posts[state.modalIndex]
     return `
     <div class="modal-content">
