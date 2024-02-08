@@ -1,5 +1,6 @@
-import createHtmlString from "./components/createHtmlString.js";
 import createModal from "./components/createModal.js";
+import createFeed from "./components/createFeed.js";
+import createPost from "./components/createPost.js";
 
 export default function render(state, i18Instance) {
     
@@ -28,17 +29,23 @@ export default function render(state, i18Instance) {
         submitButton.removeAttribute('disabled')
     }
      
-    
-    const el = document.getElementById('content')
 
-    if (!state.isError) {
-        el.innerHTML = createHtmlString(state, i18Instance)
-    }
+    
+    //const el = document.getElementById('content')
+
+    // if (!state.isError) {
+    //     el.innerHTML = createHtmlString(state, i18Instance)
+    // }
     if(state.modalIndex !== null){
         const el = document.getElementById('modal-dialog')
         el.innerHTML = createModal(state, i18Instance)
     }
-    
+   
+    if (state.feeds.length > 0) {
+        createFeed(state, i18Instance)
+        createPost(state, i18Instance)
+        
+    }
 
 }
 

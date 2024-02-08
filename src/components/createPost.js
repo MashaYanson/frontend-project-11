@@ -1,11 +1,63 @@
 
-const createPost = ({link, title},i, readedPosts, i18Instance) => {
-    const isReaded = readedPosts.includes(link)
-    return `<li class="list-group-item d-flex justify-content-between align-items-start border-0 border-end-0">
-<a href=${link} class="${isReaded ? 'fw-normal' : 'fw-bold'} read-button" data-link="${link}" data-id="${i}" target="_blank" rel="noopener noreferrer">${title}</a>
-<button type="button" class="btn btn-outline-primary btn-sm read-button open-modal"  data-link="${link}" data-id="${i}" data-bs-toggle="modal" data-bs-target="#modal">
-${i18Instance.t('interface.preview')}
-</button>
-</li>`
+const createPosts = (state,i18Instance) => {
+    const posts = state.feeds.reduce((acc, feed) => {
+        return [...acc, ...feed.posts]
+    }, []);
+    const card = document.createElement('div')
+    card.classList.add('card', 'border-0')
+    const cardBody = document.createElement('div')
+    cardBody.classList.add('card-body')
+    const h2 = document.createElement('h2')
+    h2.classList.add('card-title', 'h4')
+    h2.textContent = i18Instance.t('interface.posts');
+
+    cardBody.append(h2)
+    card.append(cardBody)
+    const ul = document.createElement('ul')
+    ul.classList.add('list-group', 'border-0', 'rounded-0')
+    card.append(ul)
+
+    posts.forEach((post)=> {
+        const li = document.createElement('li')
+        li.classList.add('list-group-item', 'd-flex', 'justify-content-between','align-items-start', 'border-0', 'border-end-0')
+        ul.append(li)
+
+        const isReaded = state.readedPosts.includes(post.link) ? 'fw-normal' : 'fw-bold'
+
+        const a = document.createElement('a')
+        a.classList.add(isReaded, 'read-button')
+        a.dataset.id = post.i;
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+
+        a.setAttribute('href', post.link);
+        a.textContent = post.title;
+
+        li.append(a)
+
+        const button = document.createElement('button')
+        button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
+        button.dataset.id = post.i
+        button.setAttribute('type', 'button');
+        button.dataset.bsToggle = 'modal';
+        button.dataset.bsTarget = '#modal';
+        button.textContent = i18Instance.t('interface.preview');
+
+        li.append(button)
+
+    })
+    
+    const postEl = document.getElementById('posts-container')
+    postEl.innerHTML='';
+    postEl.append(card)
+    
+    
+    
+//     return `<li class="list-group-item d-flex justify-content-between align-items-start border-0 border-end-0">
+// <a href=${link} class="${isReaded ? 'fw-normal' : 'fw-bold'} read-button" data-link="${link}" data-id="${i}" target="_blank" rel="noopener noreferrer">${title}</a>
+// <button type="button" class="btn btn-outline-primary btn-sm read-button open-modal"  data-link="${link}" data-id="${i}" data-bs-toggle="modal" data-bs-target="#modal">
+// ${i18Instance.t('interface.preview')}
+// </button>
+// </li>`
 }
-export default createPost
+export default createPosts
