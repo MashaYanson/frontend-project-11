@@ -14,30 +14,30 @@ export default (data, feedLink) => {
             const title = item.querySelector('title').textContent
             const description = item.querySelector('description').textContent
             const link = item.querySelector('link').textContent
-            const postId = uniqueId();
+            // const postId = uniqueId();
             return {
                 title,
                 description,
                 link,
-                postId
+                // postId
             }
         })
 
 
         const feedTitle = title;
         const feedDescription = description;
-        const feedId = uniqueId();
+        // const feedId = uniqueId();
         return {
             title:feedTitle,
             description:feedDescription,
-            feedId,
+            // feedId,
             feedLink,
             posts: posts || []
-        }; 
+        };
     }
     catch(e){
         throw new Error('errors.invalidRss')
     }
-   
+
 
 }
