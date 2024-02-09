@@ -1,9 +1,9 @@
 import {uniqueId} from "lodash";
 
-export default (res, feedLink) => {
+export default (data, feedLink) => {
     try {
         const parser = new DOMParser()
-        const doc = parser.parseFromString(res.data.contents, "application/xml");
+        const doc = parser.parseFromString(data, "application/xml");
         const titleElement = doc.getElementsByTagName("title")[0];
         // const linkElement = doc.getElementsByTagName("link")[0];
         const title = titleElement.textContent;

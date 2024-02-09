@@ -4,7 +4,8 @@ import parse from "./parse.js";
 const getResponse = (link) => {
     const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`
     return axios.get(url, { timeout: 10000 }).then((resp)=>{
-       return parse(resp, link)
+       const data = resp.data.contents
+       return parse(data, link)
      }).catch((e)=>{
          console.dir(e)
         if(e.code === 'ERR_NETWORK') {
