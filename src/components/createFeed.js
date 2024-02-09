@@ -31,9 +31,7 @@ const createFeed = (state, i18Instance) => {
         li.append(p)
     })
     
-    const feedsEl = document.getElementById('feeds')
-    feedsEl.innerHTML='';
-    feedsEl.append(card)
-    // card
+   
+    return card
 }
 export default createFeed

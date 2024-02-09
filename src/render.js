@@ -28,23 +28,16 @@ export default function render(state, i18Instance) {
      } else  {
         submitButton.removeAttribute('disabled')
     }
-     
-
-    
-    //const el = document.getElementById('content')
-
-    // if (!state.isError) {
-    //     el.innerHTML = createHtmlString(state, i18Instance)
-    // }
-    // if(state.modalIndex !== null){
         const el = document.getElementById('modal-dialog')
         el.innerHTML = createModal(state, i18Instance)
-    // }
    
-    if (state.feeds.length > 0) {
-        createFeed(state, i18Instance)
-        createPost(state, i18Instance)
-        
+      if (state.feeds.length > 0) {
+        const postEl = document.getElementById('posts-container')
+        postEl.innerHTML='';
+        postEl.append(createPost(state, i18Instance));
+        const feedsEl = document.getElementById('feeds')
+        feedsEl.innerHTML='';
+        feedsEl.append(createFeed(state, i18Instance))
     }
 
 }

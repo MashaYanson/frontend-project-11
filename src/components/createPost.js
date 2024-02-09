@@ -46,9 +46,7 @@ const createPosts = (state,i18Instance) => {
 
     })
     
-    const postEl = document.getElementById('posts-container')
-    postEl.innerHTML='';
-    postEl.append(card)
+    return card
     
     
     
