@@ -1,6 +1,6 @@
 import parse from "./parse.js";
 
-const getParse= (resp, value, watchedState, i18Instance) => {
+const getParse= (resp, value, watchedState) => {
     try {
         const feed = parse(resp, value)
         watchedState.feeds = [feed,...watchedState.feeds]
@@ -10,7 +10,7 @@ const getParse= (resp, value, watchedState, i18Instance) => {
 
         watchedState.validation = true
         watchedState.loadingStatus = 'success'
-        watchedState.textError = i18Instance.t('interface.loadSuccess')
+        watchedState.textError = 'interface.loadSuccess'
         watchedState.isError = false
     } catch (e){
       

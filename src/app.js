@@ -25,16 +25,18 @@ export default function App(){
     }).then(()=>{
         yup.setLocale({
             string:{
-                url: i18Instance.t('errors.urlInvalid'),
-                required: i18Instance.t('errors.urlRequired'),
+                url: 'errors.urlInvalid',
+                required: 'errors.urlRequired',
 
             },
             mixed:{
-                notOneOf : i18Instance.t('errors.rssExists'),
+                notOneOf : 'errors.rssExists',
             }
         })
-    })
-  
+        
+    }
+    
+    )
     let state = {
         validation: true,
         feeds: [],
@@ -44,73 +46,74 @@ export default function App(){
         textError: '',
         isError: false,
         modalIndex: null,
-        
-        
+
+
     }
-    
+
     const watchedState = onChange(state, handleRender)
     const form = document.getElementById('urlform');
- 
-    form.addEventListener("submit", handleSubmit)
-    
-     const posts = document.getElementById('content')
-        posts.addEventListener('click', (e)=> {
-            
-            if (e.target.dataset.readedLink && !watchedState.readedPosts.includes(e.target.dataset.readedLink)) {
-                watchedState.readedPosts.push(e.target.dataset.readedLink)
-            }
-            if(e.target.dataset.modalIndex) {
-                watchedState.modalIndex = e.target.dataset.modalIndex;
-            }
-        })
-    
-    
 
-function refreshFeeds(){
-    setTimeout(function repeat() {
-        const promises = watchedState.feeds.map((feed)=>{
-            return getResponse(feed.feedLink)
-        })
-        Promise.all(promises).then((responses) => {
-            responses.forEach((feed) => {
-                updateFeed(watchedState, feed)
+    form.addEventListener("submit", handleSubmit)
+
+    const posts = document.getElementById('content')
+    posts.addEventListener('click', (e)=> {
+
+        if (e.target.dataset.readedLink && !watchedState.readedPosts.includes(e.target.dataset.readedLink)) {
+            watchedState.readedPosts.push(e.target.dataset.readedLink)
+        }
+        if(e.target.dataset.modalIndex) {
+            watchedState.modalIndex = e.target.dataset.modalIndex;
+        }
+    })
+
+
+
+    function refreshFeeds(){
+        setTimeout(function repeat() {
+            const promises = watchedState.feeds.map((feed)=>{
+                return getResponse(feed.feedLink)
             })
-        }).catch()
-        setTimeout(repeat, 5000);
-    }, 5000);
-}
+            Promise.all(promises).then((responses) => {
+                responses.forEach((feed) => {
+                    updateFeed(watchedState, feed)
+                })
+            }).catch()
+            setTimeout(repeat, 5000);
+        }, 5000);
+    }
     function handleSubmit(event){
         event.preventDefault()
-       
+
         const urlInput = document.getElementById('inputAddress');
         const urlValue = urlInput.value;
         const links = watchedState.feeds.map(({feedLink})=>feedLink);
-       validation(urlValue, links, i18Instance)
-           .then((value)=> {
-               watchedState.loadingStatus = 'loading'
-               return getResponse(value,watchedState, i18Instance)
-           })
-           .then((feed)=>{
-               watchedState.loadingStatus = 'success'
-               watchedState.textError = i18Instance.t('interface.loadSuccess')
-               if(!watchedState.feeds.length){
-                   refreshFeeds();
-               }
-               updateFeed(watchedState,feed)
-              
-           })
+        validation(urlValue, links, i18Instance)
+            .then((value)=> {
+                watchedState.loadingStatus = 'loading'
+                return getResponse(value,watchedState, i18Instance)
+            })
+            .then((feed)=>{
+                watchedState.loadingStatus = 'success'
+                watchedState.textError ='interface.loadSuccess'
+                if(!watchedState.feeds.length){
+                    refreshFeeds();
+                }
+                updateFeed(watchedState,feed)
+
+            })
             .catch((error)=>{
                 watchedState.isError = true
                 watchedState.loadingStatus = 'failed'
-                error.name = i18Instance.t(error)
-                watchedState.textError = i18Instance.t(error.message)
+                // error.name = i18Instance.t(error)
+                watchedState.textError = error.message
                 watchedState.validation = false
             })
     }
-    
 
-   
+
+
     function handleRender (path, value, previousValue, applyData){
         render(watchedState, i18Instance)
     }
+    
 }

@@ -1,4 +1,3 @@
-import {uniqueId} from "lodash";
 
 export default (data, feedLink) => {
     try {

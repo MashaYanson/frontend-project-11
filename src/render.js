@@ -5,7 +5,7 @@ import createPost from "./components/createPost.js";
 export default function render(state, i18Instance) {
     
     const errorMessageEl = document.getElementById('errortext')
-    errorMessageEl.textContent = state.textError
+    errorMessageEl.textContent = i18Instance.t(state.textError)
     const urlInput = document.getElementById('inputAddress');
     if (!state.isError) {
         urlInput.value = '';
