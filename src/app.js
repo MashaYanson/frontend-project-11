@@ -104,7 +104,7 @@ export default function App(){
             .catch((error)=>{
                 watchedState.isError = true
                 watchedState.loadingStatus = 'failed'
-                // error.name = i18Instance.t(error)
+                //error.name = i18Instance.t(error)
                 watchedState.textError = error.message
                 watchedState.validation = false
             })
