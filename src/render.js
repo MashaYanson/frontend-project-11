@@ -36,10 +36,10 @@ export default function render(state, i18Instance) {
     // if (!state.isError) {
     //     el.innerHTML = createHtmlString(state, i18Instance)
     // }
-    if(state.modalIndex !== null){
+    // if(state.modalIndex !== null){
         const el = document.getElementById('modal-dialog')
         el.innerHTML = createModal(state, i18Instance)
-    }
+    // }
    
     if (state.feeds.length > 0) {
         createFeed(state, i18Instance)

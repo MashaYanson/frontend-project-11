@@ -1,8 +1,6 @@
 
 const createPosts = (state,i18Instance) => {
-    const posts = state.feeds.reduce((acc, feed) => {
-        return [...acc, ...feed.posts]
-    }, []);
+    const posts = state.posts;
     const card = document.createElement('div')
     card.classList.add('card', 'border-0')
     const cardBody = document.createElement('div')
@@ -17,16 +15,16 @@ const createPosts = (state,i18Instance) => {
     ul.classList.add('list-group', 'border-0', 'rounded-0')
     card.append(ul)
 
-    posts.forEach((post)=> {
+    posts.forEach((post, i)=> {
         const li = document.createElement('li')
         li.classList.add('list-group-item', 'd-flex', 'justify-content-between','align-items-start', 'border-0', 'border-end-0')
         ul.append(li)
-
         const isReaded = state.readedPosts.includes(post.link) ? 'fw-normal' : 'fw-bold'
 
         const a = document.createElement('a')
-        a.classList.add(isReaded, 'read-button')
-        a.dataset.id = post.i;
+        a.classList.add(isReaded);
+        a.dataset.readedLink = post.link;
+        a.dataset.id = i;
         a.setAttribute('target', '_blank');
         a.setAttribute('rel', 'noopener noreferrer');
 
@@ -37,7 +35,8 @@ const createPosts = (state,i18Instance) => {
 
         const button = document.createElement('button')
         button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
-        button.dataset.id = post.i
+        button.dataset.modalIndex = i
+        button.dataset.readedLink = post.link;
         button.setAttribute('type', 'button');
         button.dataset.bsToggle = 'modal';
         button.dataset.bsTarget = '#modal';

@@ -34,7 +34,6 @@ const createFeed = (state, i18Instance) => {
     const feedsEl = document.getElementById('feeds')
     feedsEl.innerHTML='';
     feedsEl.append(card)
-    console.log(feedsEl)
     // card
 }
 export default createFeed

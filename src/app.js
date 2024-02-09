@@ -55,14 +55,12 @@ export default function App(){
     
      const posts = document.getElementById('content')
         posts.addEventListener('click', (e)=> {
-            if (e.target.classList.contains('read-button')) {
-                watchedState.readedPosts.push(e.target.dataset.link)
+            
+            if (e.target.dataset.readedLink && !watchedState.readedPosts.includes(e.target.dataset.readedLink)) {
+                watchedState.readedPosts.push(e.target.dataset.readedLink)
             }
-            if(e.target.classList.contains('open-modal')) {
-                watchedState.modalIndex = e.target.dataset.id;
-            }
-            if(e.target.classList.contains('close-modal')) {
-                watchedState.modalIndex = null
+            if(e.target.dataset.modalIndex) {
+                watchedState.modalIndex = e.target.dataset.modalIndex;
             }
         })
     
