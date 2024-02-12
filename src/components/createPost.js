@@ -1,60 +1,49 @@
+const createPosts = (state, i18Instance) => {
+  const { posts } = state;
+  const card = document.createElement('div');
+  card.classList.add('card', 'border-0');
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+  const h2 = document.createElement('h2');
+  h2.classList.add('card-title', 'h4');
+  h2.textContent = i18Instance.t('interface.posts');
 
-const createPosts = (state,i18Instance) => {
-    const posts = state.posts;
-    const card = document.createElement('div')
-    card.classList.add('card', 'border-0')
-    const cardBody = document.createElement('div')
-    cardBody.classList.add('card-body')
-    const h2 = document.createElement('h2')
-    h2.classList.add('card-title', 'h4')
-    h2.textContent = i18Instance.t('interface.posts');
+  cardBody.append(h2);
+  card.append(cardBody);
+  const ul = document.createElement('ul');
+  ul.classList.add('list-group', 'border-0', 'rounded-0');
+  card.append(ul);
 
-    cardBody.append(h2)
-    card.append(cardBody)
-    const ul = document.createElement('ul')
-    ul.classList.add('list-group', 'border-0', 'rounded-0')
-    card.append(ul)
+  posts.forEach((post, i) => {
+    const li = document.createElement('li');
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    ul.append(li);
+    const isReaded = state.readedPosts.includes(post.link) ? 'fw-normal' : 'fw-bold';
 
-    posts.forEach((post, i)=> {
-        const li = document.createElement('li')
-        li.classList.add('list-group-item', 'd-flex', 'justify-content-between','align-items-start', 'border-0', 'border-end-0')
-        ul.append(li)
-        const isReaded = state.readedPosts.includes(post.link) ? 'fw-normal' : 'fw-bold'
+    const a = document.createElement('a');
+    a.classList.add(isReaded);
+    a.dataset.readedLink = post.link;
+    a.dataset.id = i;
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
 
-        const a = document.createElement('a')
-        a.classList.add(isReaded);
-        a.dataset.readedLink = post.link;
-        a.dataset.id = i;
-        a.setAttribute('target', '_blank');
-        a.setAttribute('rel', 'noopener noreferrer');
+    a.setAttribute('href', post.link);
+    a.textContent = post.title;
 
-        a.setAttribute('href', post.link);
-        a.textContent = post.title;
+    li.append(a);
 
-        li.append(a)
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.dataset.modalIndex = i;
+    button.dataset.readedLink = post.link;
+    button.setAttribute('type', 'button');
+    button.dataset.bsToggle = 'modal';
+    button.dataset.bsTarget = '#modal';
+    button.textContent = i18Instance.t('interface.preview');
 
-        const button = document.createElement('button')
-        button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
-        button.dataset.modalIndex = i
-        button.dataset.readedLink = post.link;
-        button.setAttribute('type', 'button');
-        button.dataset.bsToggle = 'modal';
-        button.dataset.bsTarget = '#modal';
-        button.textContent = i18Instance.t('interface.preview');
+    li.append(button);
+  });
 
-        li.append(button)
-
-    })
-    
-    return card
-    
-    
-    
-//     return `<li class="list-group-item d-flex justify-content-between align-items-start border-0 border-end-0">
-// <a href=${link} class="${isReaded ? 'fw-normal' : 'fw-bold'} read-button" data-link="${link}" data-id="${i}" target="_blank" rel="noopener noreferrer">${title}</a>
-// <button type="button" class="btn btn-outline-primary btn-sm read-button open-modal"  data-link="${link}" data-id="${i}" data-bs-toggle="modal" data-bs-target="#modal">
-// ${i18Instance.t('interface.preview')}
-// </button>
-// </li>`
-}
-export default createPosts
+  return card;
+};
+export default createPosts;

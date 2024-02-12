@@ -1,7 +1,6 @@
-
 const createModal = (state, i18Instance) => {
-    const post = state.posts[state.modalIndex]
-    return `
+  const post = state.posts[state.modalIndex];
+  return `
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">${post?.title || ''}</h5>
@@ -14,6 +13,6 @@ const createModal = (state, i18Instance) => {
         <button type="button" class="btn btn-primary full-article" href=${post?.link || ''}>${i18Instance.t('interface.readMoreButton')}</button>
         <button type="button" class="btn btn-secondary close-modal" data-bs-dismiss="modal">${i18Instance.t('interface.closeButton')}</button>
       </div>
-`
-}
-export  default  createModal
+`;
+};
+export default createModal;
