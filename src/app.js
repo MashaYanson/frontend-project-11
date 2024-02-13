@@ -48,19 +48,6 @@ export default function App() {
   const watchedState = onChange(state, handleRender);
   const form = document.getElementById('urlform');
 
-  form.addEventListener('submit', handleSubmit);
-
-  const posts = document.getElementById('content');
-  posts.addEventListener('click', (e) => {
-    const readPost = watchedState.readedPosts;
-    if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
-      watchedState.readedPosts.push(e.target.dataset.readedLink);
-    }
-    if (e.target.dataset.modalIndex) {
-      watchedState.modalIndex = e.target.dataset.modalIndex;
-    }
-  });
-
   function refreshFeeds() {
     setTimeout(function repeat() {
       const promises = watchedState.feeds.map((feed) => getResponse(feed.feedLink));
@@ -72,6 +59,7 @@ export default function App() {
       setTimeout(repeat, 5000);
     }, 5000);
   }
+
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -98,6 +86,19 @@ export default function App() {
         watchedState.validation = false;
       });
   }
+
+  form.addEventListener('submit', handleSubmit);
+
+  const posts = document.getElementById('content');
+  posts.addEventListener('click', (e) => {
+    const readPost = watchedState.readedPosts;
+    if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
+      watchedState.readedPosts.push(e.target.dataset.readedLink);
+    }
+    if (e.target.dataset.modalIndex) {
+      watchedState.modalIndex = e.target.dataset.modalIndex;
+    }
+  });
 
   function handleRender() {
     render(watchedState, i18Instance);
