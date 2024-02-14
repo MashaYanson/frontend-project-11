@@ -44,7 +44,7 @@ export default function App() {
       },
     });
     // eslint-disable-next-line no-use-before-define
-    const watchedState = onChange(state, handleRender);
+    const watchedState = onChange(state, (path) => render(watchedState, i18Instance, path));
     const form = document.getElementById('urlform');
 
     function refreshFeeds() {
@@ -97,9 +97,5 @@ export default function App() {
         watchedState.modalIndex = e.target.dataset.modalIndex;
       }
     });
-
-    function handleRender() {
-      render(watchedState, i18Instance);
-    }
   });
 }
