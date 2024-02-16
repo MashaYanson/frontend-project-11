@@ -9,8 +9,7 @@ export default function render(state, i18Instance, path) {
   const errorMessageEl = document.getElementById('errortext');
   errorMessageEl.textContent = i18Instance.t(state.textError);
   const urlInput = document.getElementById('inputAddress');
-  console.log(path);
-
+  const modalWindow = document.getElementById('modal-dialog');
   switch (path) {
     case 'loadingStatus':
       if (state.loadingStatus === 'loading') {
@@ -48,7 +47,8 @@ export default function render(state, i18Instance, path) {
       break;
 
     case 'modalIndex':
-      console.log(createModal());
+      console.log('modal');
+      modalWindow.append(createModal(state, i18Instance));
       break;
 
     default:
