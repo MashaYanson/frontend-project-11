@@ -17,7 +17,6 @@ export default function render(state, i18Instance, path) {
       } else {
         submitButton.removeAttribute('disabled');
       }
-      // console.log(state.loadingStatus);
       break;
 
     case 'feeds':
@@ -25,6 +24,7 @@ export default function render(state, i18Instance, path) {
       feedsEl.append(createFeed(state, i18Instance));
       break;
 
+    case 'readedPosts':
     case 'posts':
       postEl.innerHTML = '';
       postEl.append(createPost(state, i18Instance));
@@ -48,7 +48,7 @@ export default function render(state, i18Instance, path) {
 
     case 'modalIndex':
       console.log('modal');
-      modalWindow.append(createModal(state, i18Instance));
+      modalWindow.append(createModal(state));
       break;
 
     default:
