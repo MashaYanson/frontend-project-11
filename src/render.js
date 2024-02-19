@@ -7,7 +7,7 @@ export default function render(state, i18Instance, path) {
   const postEl = document.getElementById('posts-container');
   const feedsEl = document.getElementById('feeds');
   const errorMessageEl = document.getElementById('errortext');
-  errorMessageEl.textContent = i18Instance.t(state.textError);
+  errorMessageEl.textContent = i18Instance.t(state.error);
   const urlInput = document.getElementById('inputAddress');
   const modalWindow = document.getElementById('modal-dialog');
   switch (path) {
@@ -30,8 +30,8 @@ export default function render(state, i18Instance, path) {
       postEl.append(createPost(state, i18Instance));
       break;
 
-    case 'textError':
-      if (!state.isError) {
+    case 'error':
+      if (state.status === 'success') {
         urlInput.value = '';
         urlInput.classList.remove('is-invalid');
         urlInput.classList.add('is-valid');

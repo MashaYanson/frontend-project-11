@@ -14,10 +14,8 @@ export default function App() {
     posts: [],
     viewedPostsIds: [],
     status: 'filling',
-    textError: '',
-    isError: false,
+    error: '',
     modalPostId: null,
-
   };
 
   const i18Instance = i18n.createInstance();
@@ -70,16 +68,15 @@ export default function App() {
         })
         .then((feed) => {
           watchedState.status = 'success';
-          watchedState.textError = 'interface.loadSuccess';
+          watchedState.error = 'interface.loadSuccess';
           if (!watchedState.feeds.length) {
             refreshFeeds();
           }
           updateFeed(watchedState, feed);
         })
         .catch((error) => {
-          watchedState.isError = true;
           watchedState.status = 'failed';
-          watchedState.textError = error.message;
+          watchedState.error = error.message;
         });
     }
 
