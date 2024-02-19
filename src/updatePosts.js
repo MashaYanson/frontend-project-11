@@ -6,7 +6,7 @@ const updateFeed = (watchedState, feed) => {
     watchedState.feeds = [feed, ...watchedState.feeds];
     watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
     watchedState.validation = true;
-    watchedState.loadingStatus = 'success';
+    watchedState.status = 'success';
     watchedState.isError = false;
   }
 };

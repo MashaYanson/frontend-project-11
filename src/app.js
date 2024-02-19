@@ -10,11 +10,10 @@ import updateFeed from './updatePosts.js';
 
 export default function App() {
   const state = {
-    validation: true,
     feeds: [],
     posts: [],
     viewedPostsIds: [],
-    loadingStatus: null,
+    status: 'filling',
     textError: '',
     isError: false,
     modalPostId: null,
@@ -66,11 +65,11 @@ export default function App() {
       const links = watchedState.feeds.map(({ feedLink }) => feedLink);
       validation(urlValue, links, i18Instance)
         .then((value) => {
-          watchedState.loadingStatus = 'loading';
+          watchedState.status = 'loading';
           return getResponse(value, watchedState, i18Instance);
         })
         .then((feed) => {
-          watchedState.loadingStatus = 'success';
+          watchedState.status = 'success';
           watchedState.textError = 'interface.loadSuccess';
           if (!watchedState.feeds.length) {
             refreshFeeds();
@@ -79,9 +78,8 @@ export default function App() {
         })
         .catch((error) => {
           watchedState.isError = true;
-          watchedState.loadingStatus = 'failed';
+          watchedState.status = 'failed';
           watchedState.textError = error.message;
-          watchedState.validation = false;
         });
     }
 

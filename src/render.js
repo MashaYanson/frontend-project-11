@@ -11,8 +11,8 @@ export default function render(state, i18Instance, path) {
   const urlInput = document.getElementById('inputAddress');
   const modalWindow = document.getElementById('modal-dialog');
   switch (path) {
-    case 'loadingStatus':
-      if (state.loadingStatus === 'loading') {
+    case 'status':
+      if (state.status === 'loading') {
         submitButton.setAttribute('disabled', true);
       } else {
         submitButton.removeAttribute('disabled');
