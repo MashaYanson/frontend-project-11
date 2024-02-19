@@ -1,7 +1,11 @@
 export default (data, feedLink) => {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data, 'application/xml');
+  // try {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(data, 'application/xml');
+  const errorNode = doc.querySelector('parsererror');
+  if (errorNode) {
+    throw new Error('errors.invalidRss');
+  } else {
     const titleElement = doc.getElementsByTagName('title')[0];
     const title = titleElement.textContent;
     const descriptionElem = doc.getElementsByTagName('description')[0];
@@ -17,19 +21,17 @@ export default (data, feedLink) => {
         title,
         description,
         link,
-        // postId
       };
     });
 
     const feedTitle = title;
     const feedDescription = description;
+
     return {
       title: feedTitle,
       description: feedDescription,
       feedLink,
       posts: posts || [],
     };
-  } catch (e) {
-    throw new Error('errors.invalidRss');
   }
 };
