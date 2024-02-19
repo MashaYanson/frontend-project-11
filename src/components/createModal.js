@@ -1,5 +1,5 @@
 const createModal = (state) => {
-  const post = state.posts[state.modalIndex];
+  const post = state.posts[state.modalPostId];
 
   const title = document.querySelector('.modal-title');
   const description = document.querySelector('.modal-body');
@@ -9,7 +9,7 @@ const createModal = (state) => {
   description.textContent = post?.description || '';
   link.setAttribute('href', post?.link || '');
 
-  const linkDom = document.querySelector(`[data-id="${state.modalIndex}"]`);
+  const linkDom = document.querySelector(`[data-id="${state.modalPostId}"]`);
   linkDom.classList.remove('fw-bold');
   linkDom.classList.add('fw-normal');
 };

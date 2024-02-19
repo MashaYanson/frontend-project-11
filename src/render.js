@@ -24,7 +24,7 @@ export default function render(state, i18Instance, path) {
       feedsEl.append(createFeed(state, i18Instance));
       break;
 
-    case 'readedPosts':
+    case 'viewedPostsIds':
     case 'posts':
       postEl.innerHTML = '';
       postEl.append(createPost(state, i18Instance));
@@ -46,7 +46,7 @@ export default function render(state, i18Instance, path) {
       }
       break;
 
-    case 'modalIndex':
+    case 'modalPostId':
       console.log('modal');
       modalWindow.append(createModal(state));
       break;

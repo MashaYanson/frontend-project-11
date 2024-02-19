@@ -13,11 +13,11 @@ export default function App() {
     validation: true,
     feeds: [],
     posts: [],
-    readedPosts: [],
+    viewedPostsIds: [],
     loadingStatus: null,
     textError: '',
     isError: false,
-    modalIndex: null,
+    modalPostId: null,
 
   };
 
@@ -89,12 +89,12 @@ export default function App() {
 
     const posts = document.getElementById('content');
     posts.addEventListener('click', (e) => {
-      const readPost = watchedState.readedPosts;
+      const readPost = watchedState.viewedPostsIds;
       if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
-        watchedState.readedPosts.push(e.target.dataset.readedLink);
+        watchedState.viewedPostsIds.push(e.target.dataset.readedLink);
       }
       if (e.target.dataset.modalIndex) {
-        watchedState.modalIndex = e.target.dataset.modalIndex;
+        watchedState.modalPostId = e.target.dataset.modalIndex;
       }
     });
   });

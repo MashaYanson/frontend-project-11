@@ -18,7 +18,7 @@ const createPosts = (state, i18Instance) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
     ul.append(li);
-    const isReaded = state.readedPosts.includes(post.link) ? 'fw-normal' : 'fw-bold';
+    const isReaded = state.viewedPostsIds.includes(post.link) ? 'fw-normal' : 'fw-bold';
 
     const a = document.createElement('a');
     a.classList.add(isReaded);
