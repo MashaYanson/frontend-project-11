@@ -87,10 +87,14 @@ export default function App() {
       const readPost = watchedState.viewedPostsIds;
       if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
         watchedState.viewedPostsIds.push(e.target.dataset.readedLink);
+        // записываем в стейт как прочитанный
+        console.log(e.target.dataset);
       }
       if (e.target.dataset.modalIndex) {
-        console.log(e.target.dataset.id);
         watchedState.modalPostId = e.target.dataset.modalIndex;
+        // записываем в стейт айди модалки
+        console.log(watchedState.modalPostId);
+        console.log(e.target.dataset);
       }
     });
   });
