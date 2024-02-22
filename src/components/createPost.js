@@ -18,11 +18,11 @@ const createPosts = (state, i18Instance) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
     ul.append(li);
-    const isReaded = state.viewedPostsIds.includes(post.link) ? 'fw-normal' : 'fw-bold';
+    const isReaded = state.viewedPostsIds.includes(post.id) ? 'fw-normal' : 'fw-bold';
 
     const a = document.createElement('a');
     a.classList.add(isReaded);
-    a.dataset.readedLink = post.link;
+    a.dataset.readedLink = post.id;
     a.dataset.id = i;
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
@@ -35,7 +35,8 @@ const createPosts = (state, i18Instance) => {
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.dataset.modalIndex = i;
-    button.dataset.readedLink = post.link;
+    button.dataset.readedLink = post.id;
+    button.dataset.id = post.id;
     button.setAttribute('type', 'button');
     button.dataset.bsToggle = 'modal';
     button.dataset.bsTarget = '#modal';

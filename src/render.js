@@ -47,7 +47,6 @@ export default function render(state, i18Instance, path) {
       break;
 
     case 'modalPostId':
-      console.log('modal');
       modalWindow.append(createModal(state));
       break;
 

@@ -6,7 +6,7 @@ import translationRU from './locales/ru.js';
 import translationENG from './locales/eng.js';
 import getResponse from './getResponse.js';
 import validation from './validationSchema.js';
-import updateFeed from './updatePosts.js';
+import updateFeed from './updateFeed.js';
 
 export default function App() {
   const state = {
@@ -89,8 +89,13 @@ export default function App() {
         watchedState.viewedPostsIds.push(e.target.dataset.readedLink);
       }
       if (e.target.dataset.modalIndex) {
+        console.log(e.target.dataset.id);
         watchedState.modalPostId = e.target.dataset.modalIndex;
       }
     });
   });
 }
+// {
+//   dataSet : {
+//   }<div id='aaa' data-readed-link="12445"
+// }
