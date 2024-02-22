@@ -7,7 +7,6 @@ const getResponse = (link) => {
     const data = resp.data.contents;
     return parse(data, link);
   }).catch((e) => {
-    console.dir(e);
     if (e.code === 'ERR_NETWORK') {
       throw new Error('errors.networkError');
     } else {
