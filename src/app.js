@@ -68,7 +68,8 @@ export default function App() {
         })
         .then((feed) => {
           watchedState.status = 'success';
-          watchedState.error = 'interface.loadSuccess';
+          console.log(watchedState);
+          // watchedState.error = 'interface.loadSuccess';
           if (!watchedState.feeds.length) {
             refreshFeeds();
           }
@@ -98,8 +99,4 @@ export default function App() {
       }
     });
   });
-}
-// {
-//   dataSet : {
-//   }<div id='aaa' data-readed-link="12445"
-// }
+};
