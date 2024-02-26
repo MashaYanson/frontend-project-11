@@ -7,7 +7,6 @@ export default function render(state, i18Instance, path) {
   const postEl = document.getElementById('posts-container');
   const feedsEl = document.getElementById('feeds');
   const feedbackMessageEl = document.querySelector('.feedback');
-  // feedbackMessageEl.textContent = i18Instance.t(state.error);
   const urlInput = document.getElementById('inputAddress');
   const modalWindow = document.getElementById('modal-dialog');
   switch (path) {
@@ -46,15 +45,6 @@ export default function render(state, i18Instance, path) {
       break;
 
     case 'error':
-      // if (state.status === 'success') {
-      //   urlInput.value = '';
-      //   urlInput.classList.remove('is-invalid');
-      //   urlInput.classList.add('is-valid');
-      //   urlInput.focus();
-      //   feedbackMessageEl.classList.add('text-success');
-      //   feedbackMessageEl.classList.remove('text-danger');
-      // } else
-      // {
       feedbackMessageEl.textContent = i18Instance.t(state.error);
       urlInput.classList.remove('is-valid');
       urlInput.classList.add('is-invalid');
