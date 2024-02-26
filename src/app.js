@@ -64,12 +64,12 @@ export default function App() {
       validation(urlValue, links, i18Instance)
         .then((value) => {
           watchedState.status = 'loading';
+          console.log(watchedState);
           return getResponse(value, watchedState, i18Instance);
         })
         .then((feed) => {
           watchedState.status = 'success';
-          console.log(watchedState);
-          // watchedState.error = 'interface.loadSuccess';
+
           if (!watchedState.feeds.length) {
             refreshFeeds();
           }
@@ -78,6 +78,9 @@ export default function App() {
         .catch((error) => {
           watchedState.status = 'failed';
           watchedState.error = error.message;
+        })
+        .finally(() => {
+          watchedState.status = 'filling';
         });
     }
 
@@ -99,4 +102,4 @@ export default function App() {
       }
     });
   });
-};
+}

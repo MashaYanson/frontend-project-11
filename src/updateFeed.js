@@ -21,11 +21,9 @@ const updateFeed = (watchedState, feed) => {
     const updatedPosts = [...newPostsWithId, ...oldPosts];
     watchedState.feeds[oldFeedIndex] = { ...feed, id: oldFeed.id, posts: updatedPosts };
     watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
-    watchedState.status = 'success';
   } else {
     watchedState.feeds = [makeId(feed), ...watchedState.feeds];
     watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
-    watchedState.status = 'success';
   }
 };
 export default updateFeed;
