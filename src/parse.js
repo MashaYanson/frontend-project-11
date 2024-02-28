@@ -7,14 +7,12 @@ export default (data, feedLink) => {
     throw new Error('errors.invalidRss');
   } else {
     const titleElement = doc.getElementsByTagName('title')[0];
-    const title = titleElement.textContent;
+    const feedTitle = titleElement.textContent;
     const descriptionElem = doc.getElementsByTagName('description')[0];
-    const description = descriptionElem.textContent;
+    const feedDescription = descriptionElem.textContent;
     const items = doc.getElementsByTagName('item');
     const posts = [...items].map((item) => {
-      // eslint-disable-next-line no-shadow
       const title = item.querySelector('title').textContent;
-      // eslint-disable-next-line no-shadow
       const description = item.querySelector('description').textContent;
       const link = item.querySelector('link').textContent;
       return {
@@ -23,9 +21,6 @@ export default (data, feedLink) => {
         link,
       };
     });
-
-    const feedTitle = title;
-    const feedDescription = description;
 
     return {
       title: feedTitle,
