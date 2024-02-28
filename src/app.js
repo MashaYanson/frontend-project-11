@@ -2,10 +2,10 @@ import onChange from 'on-change';
 import * as yup from 'yup';
 import i18n from 'i18next';
 import axios from 'axios';
+import { uniqueId } from 'lodash';
 import render from './render.js';
 import translationRU from './locales/ru.js';
 import translationENG from './locales/eng.js';
-import updateFeed from './updateFeed.js';
 import parse from './parse.js';
 
 const validation = (url, addedLinks) => yup.string()
@@ -27,6 +27,32 @@ const getResponse = (link) => {
       throw new Error(e.message);
     }
   });
+};
+const makeId = (feed) => ({
+  ...feed,
+  id: uniqueId(),
+  posts: feed.posts.map((post) => ({
+    ...post,
+    id: uniqueId(),
+  })),
+});
+
+const updateFeed = (watchedState, feed) => {
+  const links = watchedState.feeds.map(({ feedLink }) => feedLink);
+  if (links.includes(feed.feedLink)) {
+    const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
+    const oldFeed = watchedState.feeds[oldFeedIndex];
+    const oldPostsLinks = oldFeed.posts.map((post) => post.link);
+    const newPosts = feed.posts.filter((post) => !oldPostsLinks.includes(post.link));
+    const oldPosts = feed.posts.filter((post) => oldPostsLinks.includes(post.link));
+    const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
+    const updatedPosts = [...newPostsWithId, ...oldPosts];
+    watchedState.feeds[oldFeedIndex] = { ...feed, id: oldFeed.id, posts: updatedPosts };
+    watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
+  } else {
+    watchedState.feeds = [makeId(feed), ...watchedState.feeds];
+    watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
+  }
 };
 
 export default function App() {
