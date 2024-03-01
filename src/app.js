@@ -42,24 +42,6 @@ const addNewFeed = (link, watchedState) => {
     });
 };
 
-// const updateFeed = (watchedState, feed) => {
-//   const links = watchedState.feeds.map(({ feedLink }) => feedLink);
-//   if (links.includes(feed.feedLink)) {
-//     const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
-//     const oldFeed = watchedState.feeds[oldFeedIndex];
-//     const oldPostsLinks = oldFeed.posts.map((post) => post.link);
-//     const newPosts = feed.posts.filter((post) => !oldPostsLinks.includes(post.link));
-//     const oldPosts = feed.posts.filter((post) => oldPostsLinks.includes(post.link));
-//     const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
-//     const updatedPosts = [...newPostsWithId, ...oldPosts];
-//     watchedState.feeds[oldFeedIndex] = { ...feed, id: oldFeed.id, posts: updatedPosts };
-//     watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
-//   } else {
-//     watchedState.feeds = [makeId(feed), ...watchedState.feeds];
-//     watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
-//   }
-// };
-
 export default function App() {
   const state = {
     feeds: [],
@@ -96,17 +78,39 @@ export default function App() {
     const watchedState = onChange(state, (path) => render(watchedState, i18Instance, path));
     const form = document.getElementById('urlform');
 
-    // function refreshFeeds() {
-    //   setTimeout(function repeat() {
-    //     const promises = watchedState.feeds.map((feed) => getResponse(feed.feedLink));
-    //     Promise.all(promises).then((responses) => {
-    //       responses.forEach((feed) => {
-    //         updateFeed(watchedState, feed);
-    //       });
-    //     }).catch();
-    //     setTimeout(repeat, 5000);
-    //   }, 5000);
-    // }
+    function refreshFeeds() {
+      if (watchedState.feeds.length > 0) {
+        console.log('refresh');
+        // eslint-disable-next-line max-len
+        const promises = watchedState.feeds.map((feed) => {
+          const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.feedLink)}`;
+          return axios.get(url, { timeout: 10000 })
+            .then((resp) => {
+              const data = resp.data.contents;
+              return parse(data, feed.feedLink);
+            }).catch((e) => {
+              console.error(e.message);
+            });
+        });
+        Promise.all(promises).then((responses) => {
+          responses.forEach((feed) => {
+            // eslint-disable-next-line max-len
+            const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
+            const oldFeed = watchedState.feeds[oldFeedIndex];
+            const oldPostsLinks = oldFeed.posts.map((post) => post.link);
+            const newPosts = feed.posts.filter((post) => !oldPostsLinks.includes(post.link));
+            const oldPosts = feed.posts.filter((post) => oldPostsLinks.includes(post.link));
+            const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
+            const updatedPosts = [...newPostsWithId, ...oldPosts];
+            watchedState.feeds[oldFeedIndex] = { ...feed, id: oldFeed.id, posts: updatedPosts };
+            // eslint-disable-next-line max-len
+            watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
+          });
+        });
+      }
+
+      setTimeout(refreshFeeds, 5000);
+    }
 
     function handleSubmit(event) {
       event.preventDefault();
@@ -143,5 +147,6 @@ export default function App() {
         console.log(e.target.dataset);
       }
     });
+    refreshFeeds();
   });
 }
