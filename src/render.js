@@ -123,6 +123,9 @@ export default function render(state, i18Instance, path) {
         urlInput.classList.replace('is-valid', 'is-invalid');
         feedbackMessageEl.classList.replace('text-success', 'text-danger');
         submitButton.removeAttribute('disabled');
+      }
+      if (state.status === 'filling') {
+        feedbackMessageEl.textContent = '';
       } else {
         submitButton.removeAttribute('disabled');
       }
