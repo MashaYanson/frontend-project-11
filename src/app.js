@@ -49,10 +49,9 @@ const refreshFeeds = (watchedState) => {
         // eslint-disable-next-line max-len
         watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
       });
+      setTimeout(refreshFeeds, 5000);
     });
   }
-
-  setTimeout(refreshFeeds, 5000);
 };
 
 const addNewFeed = (link, watchedState) => {
