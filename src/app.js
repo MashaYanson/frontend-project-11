@@ -23,6 +23,40 @@ const makeId = (feed) => ({
   })),
 });
 
+const refreshFeeds = (watchedState) => {
+  if (watchedState.feeds.length > 0) {
+    console.log('refresh');
+    // eslint-disable-next-line max-len
+    const promises = watchedState.feeds.map((feed) => {
+      const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.feedLink)}`;
+      return axios.get(url, { timeout: 10000 })
+        .then((resp) => {
+          const data = resp.data.contents;
+          return parse(data, feed.feedLink);
+        }).catch((e) => {
+          console.error(e.message);
+        });
+    });
+    Promise.all(promises).then((responses) => {
+      responses.forEach((feed) => {
+        // eslint-disable-next-line max-len
+        const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
+        const oldFeed = watchedState.feeds[oldFeedIndex];
+        const oldPostsLinks = oldFeed.posts.map((post) => post.link);
+        const newPosts = feed.posts.filter((post) => !oldPostsLinks.includes(post.link));
+        const oldPosts = feed.posts.filter((post) => oldPostsLinks.includes(post.link));
+        const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
+        const updatedPosts = [...newPostsWithId, ...oldPosts];
+        watchedState.feeds[oldFeedIndex] = { ...feed, id: oldFeed.id, posts: updatedPosts };
+        // eslint-disable-next-line max-len
+        watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
+      });
+    });
+  }
+
+  setTimeout(refreshFeeds, 5000);
+};
+
 const addNewFeed = (link, watchedState) => {
   const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`;
   return axios.get(url, { timeout: 10000 })
@@ -78,40 +112,6 @@ export default function App() {
     const watchedState = onChange(state, (path) => render(watchedState, i18Instance, path));
     const form = document.getElementById('urlform');
 
-    function refreshFeeds() {
-      if (watchedState.feeds.length > 0) {
-        console.log('refresh');
-        // eslint-disable-next-line max-len
-        const promises = watchedState.feeds.map((feed) => {
-          const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.feedLink)}`;
-          return axios.get(url, { timeout: 10000 })
-            .then((resp) => {
-              const data = resp.data.contents;
-              return parse(data, feed.feedLink);
-            }).catch((e) => {
-              console.error(e.message);
-            });
-        });
-        Promise.all(promises).then((responses) => {
-          responses.forEach((feed) => {
-            // eslint-disable-next-line max-len
-            const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
-            const oldFeed = watchedState.feeds[oldFeedIndex];
-            const oldPostsLinks = oldFeed.posts.map((post) => post.link);
-            const newPosts = feed.posts.filter((post) => !oldPostsLinks.includes(post.link));
-            const oldPosts = feed.posts.filter((post) => oldPostsLinks.includes(post.link));
-            const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
-            const updatedPosts = [...newPostsWithId, ...oldPosts];
-            watchedState.feeds[oldFeedIndex] = { ...feed, id: oldFeed.id, posts: updatedPosts };
-            // eslint-disable-next-line max-len
-            watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
-          });
-        });
-      }
-
-      setTimeout(refreshFeeds, 5000);
-    }
-
     function handleSubmit(event) {
       event.preventDefault();
       watchedState.status = 'filling';
@@ -147,6 +147,6 @@ export default function App() {
         console.log(e.target.dataset);
       }
     });
-    refreshFeeds();
+    refreshFeeds(watchedState);
   });
 }
