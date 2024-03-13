@@ -36,18 +36,16 @@ const refreshFeeds = (watchedState) => {
       responses.forEach((resp, i) => {
         const data = resp.data.contents;
         const link = links[i];
-        const feed = parse(data, link);
+        const { posts, ...feed } = parse(data, link);
         // eslint-disable-next-line max-len
         const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
         const oldFeed = watchedState.feeds[oldFeedIndex];
-        const oldPostsLinks = oldFeed.posts.map((post) => post.link);
-        const newPosts = feed.posts.filter((post) => !oldPostsLinks.includes(post.link));
-        const oldPosts = feed.posts.filter((post) => oldPostsLinks.includes(post.link));
+        const oldPostsLinks = watchedState.posts.map((post) => post.link);
+        const newPosts = posts.filter((post) => !oldPostsLinks.includes(post.link));
+        const oldPosts = posts.filter((post) => oldPostsLinks.includes(post.link));
         const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
-        const updatedPosts = [...newPostsWithId, ...oldPosts];
-        watchedState.feeds[oldFeedIndex] = { ...feed, id: oldFeed.id, posts: updatedPosts };
-        // eslint-disable-next-line max-len
-        watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
+        watchedState.feeds[oldFeedIndex] = { ...oldFeed, ...feed };
+        watchedState.posts = [...newPostsWithId, ...oldPosts];
       });
       setTimeout(refreshFeeds, 5000);
     });
@@ -59,10 +57,10 @@ const addNewFeed = (link, watchedState) => {
   return axios.get(url, { timeout: 10000 })
     .then((resp) => {
       const data = resp.data.contents;
-      const feed = parse(data, link);
+      const { posts, ...feed } = makeId(parse(data, link));
       watchedState.status = 'success';
-      watchedState.feeds = [makeId(feed), ...watchedState.feeds];
-      watchedState.posts = watchedState.feeds.reduce((acc, item) => [...acc, ...item.posts], []);
+      watchedState.feeds = [feed, ...watchedState.feeds];
+      watchedState.posts = [...posts, ...watchedState.posts];
     }).catch((e) => {
       watchedState.status = 'failed';
       if (e.code === 'ERR_NETWORK') {
