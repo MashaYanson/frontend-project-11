@@ -24,21 +24,19 @@ const makeId = (feed) => ({
 });
 
 const refreshFeeds = (watchedState) => {
-  if (watchedState.feeds.length > 0) {
+  if (watchedState?.feeds && watchedState.feeds.length > 0) {
     console.log('refresh');
     // eslint-disable-next-line max-len
     const promises = watchedState.feeds.map((feed) => {
       const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.feedLink)}`;
-      return axios.get(url, { timeout: 10000 })
-        .then((resp) => {
-          const data = resp.data.contents;
-          return parse(data, feed.feedLink);
-        }).catch((e) => {
-          console.error(e.message);
-        });
+      return axios.get(url, { timeout: 10000 });
     });
     Promise.all(promises).then((responses) => {
-      responses.forEach((feed) => {
+      const links = watchedState.feeds.map((feed) => feed.feedLink);
+      responses.forEach((resp, i) => {
+        const data = resp.data.contents;
+        const link = links[i];
+        const feed = parse(data, link);
         // eslint-disable-next-line max-len
         const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
         const oldFeed = watchedState.feeds[oldFeedIndex];
