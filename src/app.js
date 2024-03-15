@@ -23,12 +23,19 @@ const makeId = (feed) => ({
   })),
 });
 
+const addProxy = (feedLink) => {
+  const url = new URL('https://allorigins.hexlet.app/get');
+  url.searchParams.append('disableCache', 'true');
+  url.searchParams.append('url', feedLink);
+  return url.toString();
+};
+
 const refreshFeeds = (watchedState) => {
   if (watchedState?.feeds && watchedState.feeds.length > 0) {
     console.log('refresh');
     // eslint-disable-next-line max-len
     const promises = watchedState.feeds.map((feed) => {
-      const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.feedLink)}`;
+      const url = addProxy(feed.feedLink);
       return axios.get(url, { timeout: 10000 });
     });
     Promise.all(promises).then((responses) => {
@@ -47,13 +54,15 @@ const refreshFeeds = (watchedState) => {
         watchedState.feeds[oldFeedIndex] = { ...oldFeed, ...feed };
         watchedState.posts = [...newPostsWithId, ...oldPosts];
       });
-      setTimeout(refreshFeeds, 5000);
+      setTimeout(() => refreshFeeds(watchedState), 5000);
     });
+  } else {
+    setTimeout(() => refreshFeeds(watchedState), 5000);
   }
 };
 
 const addNewFeed = (link, watchedState) => {
-  const url = `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`;
+  const url = addProxy(link);
   return axios.get(url, { timeout: 10000 })
     .then((resp) => {
       const data = resp.data.contents;
