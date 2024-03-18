@@ -34,26 +34,24 @@ const refreshFeeds = (watchedState) => {
   console.log('refresh');
   const promises = watchedState.feeds.map((feed) => {
     const url = addProxy(feed.feedLink);
-    return axios.get(url, { timeout: 10000 });
+    return axios.get(url, { timeout: 10000 })
+      .then((resp) => {
+        const data = resp.data.contents;
+        const link = feed.feedLink;
+        const { posts } = parse(data, link);
+        const oldPostsLinks = watchedState.posts.map((post) => post.link);
+        const newPosts = posts.filter((post) => !oldPostsLinks.includes(post.link));
+        const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
+        newPostsWithId.forEach((post) => {
+          watchedState.posts.push(post);
+        });
+      })
+      .catch();
   });
-  Promise.all(promises).then((responses) => {
-    const links = watchedState.feeds.map((feed) => feed.feedLink);
-    responses.forEach((resp, i) => {
-      const data = resp.data.contents;
-      const link = links[i];
-      const { posts, ...feed } = parse(data, link);
-      // eslint-disable-next-line max-len
-      const oldFeedIndex = watchedState.feeds.findIndex((item) => item.feedLink === feed.feedLink);
-      const oldFeed = watchedState.feeds[oldFeedIndex];
-      const oldPostsLinks = watchedState.posts.map((post) => post.link);
-      const newPosts = posts.filter((post) => !oldPostsLinks.includes(post.link));
-      const oldPosts = posts.filter((post) => oldPostsLinks.includes(post.link));
-      const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
-      watchedState.feeds[oldFeedIndex] = { ...oldFeed, ...feed };
-      watchedState.posts = [...newPostsWithId, ...oldPosts];
+  Promise.all(promises)
+    .then(() => {
+      setTimeout(() => refreshFeeds(watchedState), 5000);
     });
-    setTimeout(() => refreshFeeds(watchedState), 5000);
-  });
 };
 
 const addNewFeed = (link, watchedState) => {
@@ -65,7 +63,8 @@ const addNewFeed = (link, watchedState) => {
       watchedState.status = 'success';
       watchedState.feeds = [feed, ...watchedState.feeds];
       watchedState.posts = [...posts, ...watchedState.posts];
-    }).catch((e) => {
+    })
+    .catch((e) => {
       watchedState.status = 'failed';
       if (e.code === 'ERR_NETWORK') {
         watchedState.error = 'errors.networkError';
