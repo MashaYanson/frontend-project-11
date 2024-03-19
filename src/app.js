@@ -14,14 +14,18 @@ const validation = (url, addedLinks) => yup.string()
   .required()
   .notOneOf(addedLinks)
   .validate(url);
-const makeId = (feed) => ({
-  ...feed,
-  id: uniqueId(),
-  posts: feed.posts.map((post) => ({
-    ...post,
-    id: uniqueId(),
-  })),
-});
+const makeId = (feed) => {
+  const feedId = uniqueId();
+  return {
+    ...feed,
+    id: feedId,
+    posts: feed.posts.map((post) => ({
+      ...post,
+      id: uniqueId(),
+      feedId,
+    })),
+  };
+};
 
 const addProxy = (feedLink) => {
   const url = new URL('https://allorigins.hexlet.app/get');
@@ -31,25 +35,29 @@ const addProxy = (feedLink) => {
 };
 
 const refreshFeeds = (watchedState) => {
-  console.log('refresh');
+  const newPostsToAdd = [];
   const promises = watchedState.feeds.map((feed) => {
     const url = addProxy(feed.feedLink);
     return axios.get(url, { timeout: 10000 })
       .then((resp) => {
         const data = resp.data.contents;
-        const link = feed.feedLink;
-        const { posts } = parse(data, link);
-        const oldPostsLinks = watchedState.posts.map((post) => post.link);
+        const { posts } = parse(data);
+        const oldPostsLinks = watchedState.posts
+          .filter((post) => feed.feedId === post.feedId)
+          .map((post) => post.link);
         const newPosts = posts.filter((post) => !oldPostsLinks.includes(post.link));
         const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
         newPostsWithId.forEach((post) => {
-          watchedState.posts.push(post);
+          newPostsToAdd.push(post);
         });
       })
-      .catch();
+      .catch((error) => {
+        console.error(error);
+      });
   });
   Promise.all(promises)
     .then(() => {
+      watchedState.posts = newPostsToAdd.concat(watchedState.posts);
       setTimeout(() => refreshFeeds(watchedState), 5000);
     });
 };
@@ -60,8 +68,9 @@ const addNewFeed = (link, watchedState) => {
     .then((resp) => {
       const data = resp.data.contents;
       const { posts, ...feed } = makeId(parse(data, link));
+      const linkedFeed = { ...feed, feedLink: link };
       watchedState.status = 'success';
-      watchedState.feeds = [feed, ...watchedState.feeds];
+      watchedState.feeds = [linkedFeed, ...watchedState.feeds];
       watchedState.posts = [...posts, ...watchedState.posts];
     })
     .catch((e) => {
@@ -119,7 +128,6 @@ export default function App() {
       validation(urlValue, links, i18Instance)
         .then((value) => {
           watchedState.status = 'loading';
-          console.log(watchedState);
           addNewFeed(value, watchedState);
         })
         .catch((error) => {
@@ -136,13 +144,10 @@ export default function App() {
       if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
         watchedState.viewedPostsIds.push(e.target.dataset.readedLink);
         // записываем в стейт как прочитанный
-        console.log(e.target.dataset);
       }
       if (e.target.dataset.modalIndex) {
         watchedState.modalPostId = e.target.dataset.modalIndex;
         // записываем в стейт айди модалки
-        console.log(watchedState.modalPostId);
-        console.log(e.target.dataset);
       }
     });
     refreshFeeds(watchedState);
