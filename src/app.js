@@ -35,7 +35,6 @@ const addProxy = (feedLink) => {
 };
 
 const refreshFeeds = (watchedState) => {
-  const newPostsToAdd = [];
   const promises = watchedState.feeds.map((feed) => {
     const url = addProxy(feed.feedLink);
     return axios.get(url, { timeout: 10000 })
@@ -47,9 +46,7 @@ const refreshFeeds = (watchedState) => {
           .map((post) => post.link);
         const newPosts = posts.filter((post) => !oldPostsLinks.includes(post.link));
         const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
-        newPostsWithId.forEach((post) => {
-          newPostsToAdd.push(post);
-        });
+        watchedState.posts = newPostsWithId.concat(watchedState.posts);
       })
       .catch((error) => {
         console.error(error);
@@ -57,7 +54,6 @@ const refreshFeeds = (watchedState) => {
   });
   Promise.all(promises)
     .then(() => {
-      watchedState.posts = newPostsToAdd.concat(watchedState.posts);
       setTimeout(() => refreshFeeds(watchedState), 5000);
     });
 };
