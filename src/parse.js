@@ -4,7 +4,10 @@ export default (data) => {
   const doc = parser.parseFromString(data, 'application/xml');
   const errorNode = doc.querySelector('parsererror');
   if (errorNode) {
-    throw new Error('errors.invalidRss');
+    const error = new Error(errorNode.textContent);
+    error.isParsingError = true;
+    // throw new Error('errors.invalidRss');
+    throw error;
   } else {
     const titleElement = doc.getElementsByTagName('title')[0];
     const feedTitle = titleElement.textContent;
@@ -29,3 +32,16 @@ export default (data) => {
     };
   }
 };
+
+// const errorNode = data.querySelector('parsererror');
+// if (errorNode) {
+//   // Текст ошибки сохраняем для отладки
+//   const error = new Error(errorNode.textContent);
+//
+//   // ошибка парсера помечается в таком же стиле,
+//   // как ошибки в axios,
+//   // чтобы было удобно их различать в обработчике
+//   error.isParsingError = true;
+//
+//   throw error;
+// }

@@ -60,7 +60,7 @@ const refreshFeeds = (watchedState) => {
 
 const addNewFeed = (link, watchedState) => {
   const url = addProxy(link);
-  return axios.get(url, { timeout: 10000 })
+  axios.get(url, { timeout: 10000 })
     .then((resp) => {
       const data = resp.data.contents;
       const { posts, ...feed } = makeId(parse(data, link));
@@ -71,8 +71,10 @@ const addNewFeed = (link, watchedState) => {
     })
     .catch((e) => {
       watchedState.status = 'failed';
-      if (e.code === 'ERR_NETWORK') {
+      if (e.isAxiosError) {
         watchedState.error = 'errors.networkError';
+      } else if (e.isParsingError) {
+        watchedState.error = 'errors.invalidRss';
       } else {
         watchedState.error = e.message;
       }
