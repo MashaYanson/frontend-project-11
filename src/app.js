@@ -113,15 +113,28 @@ export default function App() {
         notOneOf: 'errors.rssExists',
       },
     });
-    // eslint-disable-next-line no-use-before-define
-    const watchedState = onChange(state, (path) => render(watchedState, i18Instance, path));
-    const form = document.getElementById('urlform');
+
+    const elements = {
+      form: document.getElementById('urlform'),
+      urlInput: document.getElementById('inputAddress'),
+      posts: document.getElementById('content'),
+      submitButton: document.getElementById('submitbtn'),
+      postEl: document.getElementById('posts-container'),
+      feedsEl: document.getElementById('feeds'),
+      feedbackMessageEl: document.querySelector('.feedback'),
+      modalWindow: document.getElementById('modal-dialog'),
+    };
+
+    // eslint-disable-next-line max-len
+    const watchedState = onChange(state, (path) => render(watchedState, i18Instance, path, elements));
+
+    // const form = document.getElementById('urlform');
 
     function handleSubmit(event) {
       event.preventDefault();
       watchedState.status = 'filling';
-      const urlInput = document.getElementById('inputAddress');
-      const urlValue = urlInput.value;
+      // const urlInput = document.getElementById('inputAddress');
+      const urlValue = elements.urlInput.value;
       const links = watchedState.feeds.map(({ feedLink }) => feedLink);
       validation(urlValue, links, i18Instance)
         .then((value) => {
@@ -134,10 +147,10 @@ export default function App() {
         });
     }
 
-    form.addEventListener('submit', handleSubmit);
+    elements.form.addEventListener('submit', handleSubmit);
 
-    const posts = document.getElementById('content');
-    posts.addEventListener('click', (e) => {
+    // const posts = document.getElementById('content');
+    elements.posts.addEventListener('click', (e) => {
       const readPost = watchedState.viewedPostsIds;
       if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
         watchedState.viewedPostsIds.push(e.target.dataset.readedLink);
