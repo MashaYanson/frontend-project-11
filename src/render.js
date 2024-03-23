@@ -1,29 +1,29 @@
-// const renderForm = (state, i18Instance, elem) => {
-//   const elements = { ...elem };
-//   if (state.status === 'loading') {
-//     elements.submitButton.setAttribute('disabled', true);
-//   }
-//   if (state.status === 'success') {
-//     elements.urlInput.value = '';
-//     elements.urlInput.classList.remove('is-invalid');
-//     elements.urlInput.classList.add('is-valid');
-//     elements.urlInput.focus();
-//     elements.feedbackMessageEl.classList.add('text-success');
-//     elements.feedbackMessageEl.classList.remove('text-danger');
-//     elements.feedbackMessageEl.textContent = i18Instance.t('interface.loadSuccess');
-//   }
-//   if (state.status === 'failed') {
-//     elements.feedbackMessageEl.textContent = i18Instance.t(state.error);
-//     elements.urlInput.classList.replace('is-valid', 'is-invalid');
-//     elements.feedbackMessageEl.classList.replace('text-success', 'text-danger');
-//     elements.submitButton.removeAttribute('disabled');
-//   }
-//   if (state.status === 'filling') {
-//     elements.feedbackMessageEl.textContent = '';
-//   } else {
-//     elements.submitButton.removeAttribute('disabled');
-//   }
-// };
+const renderForm = (state, i18Instance, elem) => {
+  const elements = { ...elem };
+  if (state.status === 'loading') {
+    elements.submitButton.setAttribute('disabled', true);
+  }
+  if (state.status === 'success') {
+    elements.urlInput.value = '';
+    elements.urlInput.classList.remove('is-invalid');
+    elements.urlInput.classList.add('is-valid');
+    elements.urlInput.focus();
+    elements.feedbackMessageEl.classList.add('text-success');
+    elements.feedbackMessageEl.classList.remove('text-danger');
+    elements.feedbackMessageEl.textContent = i18Instance.t('interface.loadSuccess');
+  }
+  if (state.status === 'failed') {
+    elements.feedbackMessageEl.textContent = i18Instance.t(state.error);
+    elements.urlInput.classList.replace('is-valid', 'is-invalid');
+    elements.feedbackMessageEl.classList.replace('text-success', 'text-danger');
+    elements.submitButton.removeAttribute('disabled');
+  }
+  if (state.status === 'filling') {
+    elements.feedbackMessageEl.textContent = '';
+  } else {
+    elements.submitButton.removeAttribute('disabled');
+  }
+};
 
 const createPost = (state, i18Instance) => {
   const { posts } = state;
@@ -134,29 +134,30 @@ export default function render(state, i18Instance, path, elem) {
   // const modalWindow = document.getElementById('modal-dialog');
   switch (path) {
     case 'status':
-      if (state.status === 'loading') {
-        elements.submitButton.setAttribute('disabled', true);
-      }
-      if (state.status === 'success') {
-        elements.urlInput.value = '';
-        elements.urlInput.classList.remove('is-invalid');
-        elements.urlInput.classList.add('is-valid');
-        elements.urlInput.focus();
-        elements.feedbackMessageEl.classList.add('text-success');
-        elements.feedbackMessageEl.classList.remove('text-danger');
-        elements.feedbackMessageEl.textContent = i18Instance.t('interface.loadSuccess');
-      }
-      if (state.status === 'failed') {
-        elements.feedbackMessageEl.textContent = i18Instance.t(state.error);
-        elements.urlInput.classList.replace('is-valid', 'is-invalid');
-        elements.feedbackMessageEl.classList.replace('text-success', 'text-danger');
-        elements.submitButton.removeAttribute('disabled');
-      }
-      if (state.status === 'filling') {
-        elements.feedbackMessageEl.textContent = '';
-      } else {
-        elements.submitButton.removeAttribute('disabled');
-      }
+      renderForm(state, i18Instance, elem);
+      // if (state.status === 'loading') {
+      //   elements.submitButton.setAttribute('disabled', true);
+      // }
+      // if (state.status === 'success') {
+      //   elements.urlInput.value = '';
+      //   elements.urlInput.classList.remove('is-invalid');
+      //   elements.urlInput.classList.add('is-valid');
+      //   elements.urlInput.focus();
+      //   elements.feedbackMessageEl.classList.add('text-success');
+      //   elements.feedbackMessageEl.classList.remove('text-danger');
+      //   elements.feedbackMessageEl.textContent = i18Instance.t('interface.loadSuccess');
+      // }
+      // if (state.status === 'failed') {
+      //   elements.feedbackMessageEl.textContent = i18Instance.t(state.error);
+      //   elements.urlInput.classList.replace('is-valid', 'is-invalid');
+      //   elements.feedbackMessageEl.classList.replace('text-success', 'text-danger');
+      //   elements.submitButton.removeAttribute('disabled');
+      // }
+      // if (state.status === 'filling') {
+      //   elements.feedbackMessageEl.textContent = '';
+      // } else {
+      //   elements.submitButton.removeAttribute('disabled');
+      // }
       break;
 
     case 'feeds':
