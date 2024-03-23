@@ -151,15 +151,6 @@ export default function App() {
     elements.form.addEventListener('submit', handleSubmit);
 
     elements.posts.addEventListener('click', (e) => {
-      // const idClick = e.target.dataset.id; // id place where was click(post or modalWindow)
-      // if (idClick) {
-      //   // looking for the post in watchedState.posts, where was click
-      //   const selectPost = watchedState.posts.find((post) => idClick === post.id);
-      //   // change style of text - id of click
-      //   if (selectPost) {
-      //     watchedState.modalPostId = selectPost.id;
-      //     watchedState.viewedPostsIds.push(selectPost);
-      //   }
       const readPost = watchedState.viewedPostsIds;
       if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
         watchedState.viewedPostsIds.push(e.target.dataset.readedLink);
