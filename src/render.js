@@ -41,16 +41,16 @@ const createPost = (state, i18Instance) => {
   ul.classList.add('list-group', 'border-0', 'rounded-0');
   card.append(ul);
 
-  posts.forEach((post, i) => {
+  posts.forEach((post) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
     ul.append(li);
-    const isReaded = state.viewedPostsIds.includes(post.id) ? 'fw-normal' : 'fw-bold';
 
+    const isReaded = state.viewedPostsIds.includes(post.id) ? 'fw-normal' : 'fw-bold';
     const a = document.createElement('a');
     a.classList.add(isReaded);
     a.dataset.readedLink = post.id;
-    a.dataset.id = i;
+    a.dataset.id = post.id;
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
 
@@ -61,7 +61,6 @@ const createPost = (state, i18Instance) => {
 
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    button.dataset.modalIndex = i;
     button.dataset.readedLink = post.id;
     button.dataset.id = post.id;
     button.setAttribute('type', 'button');

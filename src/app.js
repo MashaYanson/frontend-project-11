@@ -42,11 +42,11 @@ const refreshFeeds = (watchedState) => {
         const data = resp.data.contents;
         const { posts } = parse(data);
         const oldPostsLinks = watchedState.posts
-          .filter((post) => feed.feedId === post.feedId)
+          .filter((post) => feed.id === post.feedId)
           .map((post) => post.link);
         const newPosts = posts.filter((post) => !oldPostsLinks.includes(post.link));
         // eslint-disable-next-line max-len
-        const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId(), feedId: feed.feedId }));
+        const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId(), feedId: feed.id }));
         watchedState.posts = newPostsWithId.concat(watchedState.posts);
       })
       .catch((error) => {
@@ -151,14 +151,13 @@ export default function App() {
     elements.form.addEventListener('submit', handleSubmit);
 
     elements.posts.addEventListener('click', (e) => {
-      const readPost = watchedState.viewedPostsIds;
-      if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
-        watchedState.viewedPostsIds.push(e.target.dataset.readedLink);
-        // записываем в стейт как прочитанный
-      }
-      if (e.target.dataset.modalIndex) {
-        watchedState.modalPostId = e.target.dataset.modalIndex;
-        // записываем в стейт айди модалки
+      const idClick = e.target.dataset.id;
+      if (idClick) {
+        const selectPost = watchedState.posts.find((post) => idClick === post.id);
+        if (selectPost) {
+          watchedState.modalPostId = selectPost.id;
+          watchedState.viewedPostsIds.push(selectPost.id);
+        }
       }
     });
     refreshFeeds(watchedState);
