@@ -45,7 +45,8 @@ const refreshFeeds = (watchedState) => {
           .filter((post) => feed.feedId === post.feedId)
           .map((post) => post.link);
         const newPosts = posts.filter((post) => !oldPostsLinks.includes(post.link));
-        const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId() }));
+        // eslint-disable-next-line max-len
+        const newPostsWithId = newPosts.map((post) => ({ ...post, id: uniqueId(), feedId: feed.feedId }));
         watchedState.posts = newPostsWithId.concat(watchedState.posts);
       })
       .catch((error) => {
@@ -76,7 +77,7 @@ const addNewFeed = (link, watchedState) => {
       } else if (e.isParsingError) {
         watchedState.error = 'errors.invalidRss';
       } else {
-        watchedState.error = e.message;
+        watchedState.error = 'errors.unknownError';
       }
     });
 };
@@ -115,7 +116,7 @@ export default function App() {
     });
 
     const elements = {
-      form: document.getElementById('urlform'),
+      form: document.querySelector('form'),
       urlInput: document.getElementById('inputAddress'),
       posts: document.getElementById('content'),
       submitButton: document.getElementById('submitbtn'),
@@ -133,10 +134,10 @@ export default function App() {
     function handleSubmit(event) {
       event.preventDefault();
       watchedState.status = 'filling';
-      // const urlInput = document.getElementById('inputAddress');
-      const urlValue = elements.urlInput.value;
+      const formData = new FormData(event.target);
+      const urlValue = formData.get('url');
       const links = watchedState.feeds.map(({ feedLink }) => feedLink);
-      validation(urlValue, links, i18Instance)
+      validation(urlValue, links)
         .then((value) => {
           watchedState.status = 'loading';
           addNewFeed(value, watchedState);
@@ -149,8 +150,16 @@ export default function App() {
 
     elements.form.addEventListener('submit', handleSubmit);
 
-    // const posts = document.getElementById('content');
     elements.posts.addEventListener('click', (e) => {
+      // const idClick = e.target.dataset.id; // id place where was click(post or modalWindow)
+      // if (idClick) {
+      //   // looking for the post in watchedState.posts, where was click
+      //   const selectPost = watchedState.posts.find((post) => idClick === post.id);
+      //   // change style of text - id of click
+      //   if (selectPost) {
+      //     watchedState.modalPostId = selectPost.id;
+      //     watchedState.viewedPostsIds.push(selectPost);
+      //   }
       const readPost = watchedState.viewedPostsIds;
       if (e.target.dataset.readedLink && !readPost.includes(e.target.dataset.readedLink)) {
         watchedState.viewedPostsIds.push(e.target.dataset.readedLink);

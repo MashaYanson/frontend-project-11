@@ -8,6 +8,7 @@ export default {
     networkError: 'Network error',
     invalidUrl: 'The link should be a valid URL',
     invalidRss: 'The resource does not contain a valid RSS',
+    unknownError: 'Unknown error',
     // require: "Should not be empty",
   },
   interface: {

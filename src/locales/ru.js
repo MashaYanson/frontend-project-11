@@ -7,6 +7,7 @@ export default {
     networkError: 'Ошибка сети',
     invalidUrl: 'Ссылка должна быть валидным URL',
     invalidRss: 'Ресурс не содержит валидный RSS',
+    unknownError: 'Неизвестная ошибка',
     // require: "Не должно быть пустым",
   },
   interface: {
