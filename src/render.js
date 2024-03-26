@@ -80,43 +80,12 @@ const createModal = (state) => {
   const title = document.querySelector('.modal-title');
   const description = document.querySelector('.modal-body');
   const link = document.querySelector('.full-article');
-  console.log(title);
-  console.log(description);
-  console.log(link);
 
   title.textContent = post?.title || '';
   description.textContent = post?.description || '';
   link.setAttribute('href', post?.link || '');
 };
-// const createModal = (state, elem) => {
-//   const elements = { ...elem };
-//   return state.posts.forEach((post) => {
-//     const { title } = post;
-//     const { description } = post;
-//     const { link } = post;
-//     const { id } = post;
-//     elements.modalTitle.textContent = title;
-//     elements.modalDescription.textContent = description;
-//     elements.modalLink.setAttribute('href', link);
-//
-//     const linkDom = document.querySelector(`[data-id="${id}"]`);
-//     linkDom.classList.remove('fw-bold');
-//     linkDom.classList.add('fw-normal', 'text-muted');
-//   });
-//   // const post = state.posts[state.modalPostId];
-//   //
-//   // const title = document.querySelector('.modal-title');
-//   // const description = document.querySelector('.modal-body');
-//   // const link = document.querySelector('.full-article');
-//   //
-//   // title.textContent = post?.title || '';
-//   // description.textContent = post?.description || '';
-//   // link.setAttribute('href', post?.link || '');
-//   //
-//   // const linkDom = document.querySelector(`[data-id="${state.modalPostId}"]`);
-//   // linkDom.classList.remove('fw-bold');
-//   // linkDom.classList.add('fw-normal');
-// };
+
 const createFeed = (state, i18Instance) => {
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
@@ -177,12 +146,7 @@ export default function render(state, i18Instance, path, elem) {
       elements.urlInput.classList.add('is-invalid');
       elements.feedbackMessageEl.classList.remove('text-success');
       elements.feedbackMessageEl.classList.add('text-danger');
-      // }
       break;
-
-      // case 'modalPostId':
-      //   elements.modalWindow.append(createModal(state));
-      //   break;
 
     case 'modalPost':
       if (state.modalPost) {
