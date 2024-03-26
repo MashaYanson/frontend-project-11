@@ -89,7 +89,7 @@ export default function App() {
     viewedPostsIds: [],
     status: 'filling',
     error: '',
-    modalPostId: null,
+    modalPost: null,
   };
 
   const i18Instance = i18n.createInstance();
@@ -130,7 +130,6 @@ export default function App() {
 
     // eslint-disable-next-line max-len
     const watchedState = onChange(state, (path) => render(watchedState, i18Instance, path, elements));
-
     // const form = document.getElementById('urlform');
 
     function handleSubmit(event) {
@@ -157,7 +156,7 @@ export default function App() {
       if (idClick) {
         const selectPost = watchedState.posts.find((post) => idClick === post.id);
         if (selectPost) {
-          watchedState.modalPostId = selectPost.id;
+          watchedState.modalPost = selectPost;
           watchedState.viewedPostsIds.push(selectPost.id);
         }
       }
