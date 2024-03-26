@@ -123,7 +123,9 @@ export default function App() {
       postEl: document.getElementById('posts-container'),
       feedsEl: document.getElementById('feeds'),
       feedbackMessageEl: document.querySelector('.feedback'),
-      modalWindow: document.getElementById('modal-dialog'),
+      modalTitle: document.querySelector('.modal-title'),
+      modalDescription: document.querySelector('.modal-body'),
+      modalLink: document.querySelector('.full-article'),
     };
 
     // eslint-disable-next-line max-len
